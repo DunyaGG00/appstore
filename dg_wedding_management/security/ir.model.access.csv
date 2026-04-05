@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_dg_wedding,access_dg_wedding,model_dg_wedding,,1,1,1,1
+access_dg_wedding_hall,access_dg_wedding_hall,model_dg_wedding_hall,,1,1,1,1
+access_dg_wedding_table,access_dg_wedding_table,model_dg_wedding_table,,1,1,1,1
+access_dg_wedding_table_assignment,access_dg_wedding_table_assignment,model_dg_wedding_table_assignment,,1,1,1,1
+access_dg_wedding_employee,access_dg_wedding_employee,model_dg_wedding_employee,,1,1,1,1
+access_dg_wedding_employee_assignment,access_dg_wedding_employee_assignment,model_dg_wedding_employee_assignment,,1,1,1,1
+access_dg_wedding_menu,access_dg_wedding_menu,model_dg_wedding_menu,,1,1,1,1
+access_dg_wedding_menu_line,access_dg_wedding_menu_line,model_dg_wedding_menu_line,,1,1,1,1
+access_dg_wedding_spending_line,access_dg_wedding_spending_line,model_dg_wedding_spending_line,,1,1,1,1
+access_dg_wedding_table_assignment_wizard,access_dg_wedding_table_assignment_wizard,model_dg_wedding_table_assignment_wizard,,1,1,1,1
+access_dg_wedding_report_wizard,access_dg_wedding_report_wizard,model_dg_wedding_report_wizard,,1,1,1,1

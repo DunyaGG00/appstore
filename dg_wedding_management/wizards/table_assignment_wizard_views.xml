@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_dg_table_assignment_wizard_form" model="ir.ui.view">
+        <field name="name">dg.wedding.table.assignment.wizard.form</field>
+        <field name="model">dg.wedding.table.assignment.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Table Assignment">
+                <sheet>
+                    <div class="alert alert-info mb-3" role="alert">
+                        <strong><i class="fa fa-info-circle me-1"/>Quick Table Assignment</strong><br/>
+                        Select a table, set how many guests will be seated, and assign a waiter.
+                    </div>
+
+                    <group string="Event">
+                        <field name="wedding_id" readonly="1"/>
+                        <field name="hall_id" readonly="1"/>
+                    </group>
+
+                    <group string="Table Selection">
+                        <field name="table_id"
+                               domain="[('hall_id', '=', hall_id)]"
+                               options="{'no_create': True}"/>
+                        <field name="standard_capacity" readonly="1"/>
+                        <field name="is_vip" widget="boolean_toggle"/>
+                    </group>
+
+                    <group string="Seating">
+                        <field name="actual_guests"/>
+                        <field name="assigned_waiter_id"
+                               domain="[('employee_type', '=', 'waiter')]"
+                               options="{'no_create': True}"/>
+                        <field name="special_notes" placeholder="Dietary needs, decor, notes..."/>
+                    </group>
+
+                    <group string="Available Waiters (assigned to this event)" invisible="not available_waiter_ids">
+                        <field name="available_waiter_ids" widget="many2many_tags" readonly="1"/>
+                    </group>
+                </sheet>
+
+                <footer>
+                    <button name="action_apply" string="Save" type="object"
+                            class="btn-primary"/>
+                    <button name="action_apply_and_new" string="Save &amp; Assign Another" type="object"
+                            class="btn-secondary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action to open wizard from weddings list -->
+    <record id="action_dg_table_assignment_wizard" model="ir.actions.act_window">
+        <field name="name">Assign Table</field>
+        <field name="res_model">dg.wedding.table.assignment.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

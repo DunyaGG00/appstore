@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_dg_wedding_report_wizard_form" model="ir.ui.view">
+        <field name="name">dg.wedding.report.wizard.form</field>
+        <field name="model">dg.wedding.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Generate Report">
+                <sheet>
+                    <div class="alert alert-secondary mb-3">
+                        <i class="fa fa-file-pdf-o me-1"/>
+                        Select the report type and click <strong>Generate</strong> to download the PDF.
+                    </div>
+                    <group>
+                        <field name="wedding_id" readonly="1"/>
+                        <field name="report_type" widget="radio"/>
+                    </group>
+                    <group string="Optional Filters" invisible="report_type not in ['financial','staff']">
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                    <field name="notes" placeholder="Optional notes to include in the report..."/>
+                </sheet>
+                <footer>
+                    <button name="action_generate_report" string="Generate PDF" type="object"
+                            class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Root Menu -->
+    <menuitem id="menu_dg_wedding_root"
+              name="Wedding"
+              sequence="40"
+              web_icon="dg_wedding_management,static/description/icon.png"/>
+
+    <!-- Main sections -->
+    <menuitem id="menu_dg_wedding_events"
+              name="Events"
+              parent="menu_dg_wedding_root"
+              sequence="10"/>
+
+    <menuitem id="menu_dg_wedding_config"
+              name="Configuration"
+              parent="menu_dg_wedding_root"
+              sequence="30"/>
+
+    <!-- Events -->
+    <menuitem id="menu_dg_wedding_all"
+              name="All Weddings"
+              parent="menu_dg_wedding_events"
+              action="action_dg_wedding"
+              sequence="10"/>
+
+    <!-- Configuration -->
+    <menuitem id="menu_dg_wedding_hall_config"
+              name="Halls &amp; Venues"
+              parent="menu_dg_wedding_config"
+              action="action_dg_wedding_hall"
+              sequence="10"/>
+
+    <menuitem id="menu_dg_wedding_table_config"
+              name="Tables"
+              parent="menu_dg_wedding_config"
+              action="action_dg_wedding_table"
+              sequence="20"/>
+
+    <menuitem id="menu_dg_wedding_menu_config"
+              name="Menu Packages"
+              parent="menu_dg_wedding_config"
+              action="action_dg_wedding_menu"
+              sequence="30"/>
+
+    <menuitem id="menu_dg_wedding_employee_config"
+              name="Staff"
+              parent="menu_dg_wedding_config"
+              action="action_dg_wedding_employee"
+              sequence="40"/>
+
+</odoo>

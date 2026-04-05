@@ -1,0 +1,106 @@
+/* ═══════════════════════════════════════════════════════════════
+   DG Wedding Management — Backend Theme
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Kanban Cards ─────────────────────────────────────────────── */
+.dg-wedding-kanban .o_kanban_record {
+    border-radius: 10px;
+    border: 1px solid #e9d8fd;
+    box-shadow: 0 2px 8px rgba(168, 85, 247, 0.08);
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.dg-wedding-kanban .o_kanban_record:hover {
+    box-shadow: 0 6px 20px rgba(168, 85, 247, 0.18);
+    transform: translateY(-2px);
+}
+
+.dg-wedding-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.dg-couple {
+    font-size: 14px;
+    font-weight: 600;
+    color: #6c3082;
+    margin-bottom: 8px;
+}
+
+.dg-info-row {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 3px;
+}
+
+.dg-card-footer {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid #f3e8ff;
+}
+
+/* ── Form Header ──────────────────────────────────────────────── */
+.dg-wedding-form .o_statusbar_status button.btn-primary,
+.dg-wedding-form .o_statusbar_status button.o_statusbar_status_button_selected {
+    background: linear-gradient(135deg, #6c3082, #a855f7);
+    border-color: #6c3082;
+}
+
+.dg-ref {
+    color: #6c3082 !important;
+    font-weight: 700;
+}
+
+.dg-couple-title {
+    color: #a855f7 !important;
+    font-size: 1.1rem !important;
+}
+
+/* ── Stat Buttons ─────────────────────────────────────────────── */
+.dg-wedding-form .oe_stat_button {
+    border-color: #e9d8fd !important;
+}
+
+.dg-wedding-form .oe_stat_button:hover {
+    background: #f3e8ff !important;
+}
+
+/* ── Table Plan Tab ───────────────────────────────────────────── */
+.o_field_progressbar .o_progress {
+    background: #f3e8ff;
+}
+
+.o_field_progressbar .o_progress .o_progress_value {
+    background: linear-gradient(90deg, #6c3082, #a855f7);
+}
+
+/* ── Notebook Tabs ────────────────────────────────────────────── */
+.dg-wedding-form .o_notebook .nav-link.active {
+    color: #6c3082 !important;
+    border-bottom-color: #a855f7 !important;
+    font-weight: 600;
+}
+
+/* ── List View Decorations ────────────────────────────────────── */
+.o_list_view .o_data_row.o_list_record_selected td {
+    background: #faf5ff !important;
+}
+
+/* ── Wedding ribbon override ──────────────────────────────────── */
+.o_ribbon.bg-info {
+    background: linear-gradient(135deg, #3b82f6, #6366f1) !important;
+}
+
+/* ── Priority stars – wedding purple ─────────────────────────── */
+.o_priority .o_priority_star.fa-star {
+    color: #a855f7 !important;
+}
+
+/* ── Wizard dialog ────────────────────────────────────────────── */
+.modal-content .alert-info {
+    background: #f3e8ff;
+    border-color: #d8b4fe;
+    color: #6c3082;
+}

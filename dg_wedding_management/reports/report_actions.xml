@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_report_wedding_summary" model="ir.actions.report">
+        <field name="name">Wedding Event Summary</field>
+        <field name="model">dg.wedding</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">dg_wedding_management.report_wedding_summary</field>
+        <field name="report_file">dg_wedding_management.report_wedding_summary</field>
+        <field name="binding_model_id" ref="model_dg_wedding"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+
+    <record id="action_report_wedding_staff" model="ir.actions.report">
+        <field name="name">Wedding Staff &amp; Payroll Report</field>
+        <field name="model">dg.wedding</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">dg_wedding_management.report_wedding_staff</field>
+        <field name="report_file">dg_wedding_management.report_wedding_staff</field>
+        <field name="binding_model_id" ref="model_dg_wedding"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+
+    <record id="action_report_wedding_financial" model="ir.actions.report">
+        <field name="name">Wedding Financial Report</field>
+        <field name="model">dg.wedding</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">dg_wedding_management.report_wedding_financial</field>
+        <field name="report_file">dg_wedding_management.report_wedding_financial</field>
+        <field name="binding_model_id" ref="model_dg_wedding"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+
+    <record id="action_report_wedding_table_plan" model="ir.actions.report">
+        <field name="name">Wedding Table Plan</field>
+        <field name="model">dg.wedding</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">dg_wedding_management.report_wedding_table_plan</field>
+        <field name="report_file">dg_wedding_management.report_wedding_table_plan</field>
+        <field name="binding_model_id" ref="model_dg_wedding"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+
+</odoo>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_dg_wedding_menu_list" model="ir.ui.view">
+        <field name="name">dg.wedding.menu.list</field>
+        <field name="model">dg.wedding.menu</field>
+        <field name="arch" type="xml">
+            <list string="Menus">
+                <field name="name"/>
+                <field name="category"/>
+                <field name="menu_sale_price" widget="monetary" options="{'currency_field':'currency_id'}"/>
+                <field name="menu_cost" widget="monetary" options="{'currency_field':'currency_id'}"/>
+                <field name="margin_pct" string="Margin %"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_dg_wedding_menu_form" model="ir.ui.view">
+        <field name="name">dg.wedding.menu.form</field>
+        <field name="model">dg.wedding.menu</field>
+        <field name="arch" type="xml">
+            <form string="Menu Package">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Menu Name..."/></h1>
+                    </div>
+                    <group>
+                        <group string="Details">
+                            <field name="category"/>
+                            <field name="serves_count"/>
+                            <field name="currency_id"/>
+                        </group>
+                        <group string="Pricing">
+                            <field name="menu_sale_price" widget="monetary" options="{'currency_field':'currency_id'}"/>
+                            <field name="menu_cost" readonly="1" widget="monetary" options="{'currency_field':'currency_id'}"/>
+                            <field name="margin_pct" readonly="1"/>
+                        </group>
+                    </group>
+                    <field name="description" placeholder="Menu description, special notes..."/>
+                    <notebook>
+                        <page string="Menu Items" name="items">
+                            <field name="menu_line_ids">
+                                <list editable="bottom" string="Items">
+                                    <field name="product_id"/>
+                                    <field name="description" placeholder="Description..."/>
+                                    <field name="quantity"/>
+                                    <field name="unit" readonly="1"/>
+                                    <field name="product_cost" readonly="1"/>
+                                    <field name="subtotal_cost" readonly="1"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_dg_wedding_menu" model="ir.actions.act_window">
+        <field name="name">Menu Packages</field>
+        <field name="res_model">dg.wedding.menu</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create your first Menu Package</p>
+        </field>
+    </record>
+
+</odoo>

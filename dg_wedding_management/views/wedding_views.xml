@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ─── Search ─────────────────────────────────────────────────── -->
+    <record id="view_dg_wedding_search" model="ir.ui.view">
+        <field name="name">dg.wedding.search</field>
+        <field name="model">dg.wedding</field>
+        <field name="arch" type="xml">
+            <search string="Weddings">
+                <field name="name" string="Reference"/>
+                <field name="wedding_owner_name"/>
+                <field name="bride_name"/>
+                <field name="groom_name"/>
+                <field name="hall_id"/>
+                <filter name="draft"       string="Quotation"   domain="[('state','=','draft')]"/>
+                <filter name="confirmed"   string="Confirmed"   domain="[('state','=','confirmed')]"/>
+                <filter name="in_progress" string="In Progress" domain="[('state','=','in_progress')]"/>
+                <filter name="done"        string="Completed"   domain="[('state','=','done')]"/>
+                <filter name="cancel"      string="Cancelled"   domain="[('state','=','cancel')]"/>
+                <separator/>
+                <filter name="today" string="Today" domain="[('wedding_date','&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),('wedding_date','&lt;=', datetime.datetime.now().strftime('%Y-%m-%d 23:59:59'))]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_state"   string="Status"   context="{'group_by':'state'}"/>
+                    <filter name="group_hall"    string="Hall"     context="{'group_by':'hall_id'}"/>
+                    <filter name="group_month"   string="Month"    context="{'group_by':'wedding_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ─── List ───────────────────────────────────────────────────── -->
+    <record id="view_dg_wedding_list" model="ir.ui.view">
+        <field name="name">dg.wedding.list</field>
+        <field name="model">dg.wedding</field>
+        <field name="arch" type="xml">
+            <list string="Weddings" decoration-success="state=='done'"
+                  decoration-info="state=='in_progress'"
+                  decoration-warning="state=='confirmed'"
+                  decoration-muted="state=='cancel'">
+                <field name="name"/>
+                <field name="couple_display" string="Couple"/>
+                <field name="wedding_owner_name" string="Client"/>
+                <field name="hall_id"/>
+                <field name="wedding_date"/>
+                <field name="expected_guests"/>
+                <field name="wedding_menu_id"/>
+                <field name="wedding_earnings" optional="show" widget="monetary" options="{'currency_field':'currency_id'}"/>
+                <field name="net_profit" optional="show" widget="monetary" options="{'currency_field':'currency_id'}"/>
+                <field name="state" widget="badge"
+                       decoration-success="state=='done'"
+                       decoration-info="state=='in_progress'"
+                       decoration-warning="state=='confirmed'"
+                       decoration-danger="state=='cancel'"/>
+                <field name="priority" widget="priority" optional="show"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ─── Kanban ──────────────────────────────────────────────────── -->
+    <record id="view_dg_wedding_kanban" model="ir.ui.view">
+        <field name="name">dg.wedding.kanban</field>
+        <field name="model">dg.wedding</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="dg-wedding-kanban"
+                    group_create="false">
+                <field name="name"/>
+                <field name="couple_display"/>
+                <field name="wedding_owner_name"/>
+                <field name="hall_id"/>
+                <field name="wedding_date"/>
+                <field name="expected_guests"/>
+                <field name="net_profit"/>
+                <field name="state"/>
+                <field name="priority"/>
+                <field name="color"/>
+                <field name="currency_id"/>
+                <templates>
+                    <t t-name="card" class="dg-wedding-card">
+                        <div class="dg-wedding-card-header">
+                            <strong t-esc="record.name.value"/>
+                            <field name="priority" widget="priority"/>
+                        </div>
+                        <div class="dg-couple">
+                            <i class="fa fa-heart text-danger me-1"/>
+                            <span t-esc="record.couple_display.value or record.wedding_owner_name.value"/>
+                        </div>
+                        <div class="dg-info-row">
+                            <i class="fa fa-building-o me-1 text-muted"/>
+                            <span t-esc="record.hall_id.value"/>
+                        </div>
+                        <div class="dg-info-row">
+                            <i class="fa fa-calendar me-1 text-muted"/>
+                            <span t-esc="record.wedding_date.value"/>
+                        </div>
+                        <div class="dg-info-row">
+                            <i class="fa fa-users me-1 text-muted"/>
+                            <span t-esc="record.expected_guests.value"/> guests
+                        </div>
+                        <footer class="dg-card-footer">
+                            <field name="state" widget="badge"
+                                   decoration-success="state == 'done'"
+                                   decoration-info="state == 'in_progress'"
+                                   decoration-warning="state == 'confirmed'"
+                                   decoration-danger="state == 'cancel'"/>
+                        </footer>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- ─── Form ───────────────────────────────────────────────────── -->
+    <record id="view_dg_wedding_form" model="ir.ui.view">
+        <field name="name">dg.wedding.form</field>
+        <field name="model">dg.wedding</field>
+        <field name="arch" type="xml">
+            <form string="Wedding Event" class="dg-wedding-form">
+                <header>
+                    <button name="action_confirm" string="Confirm" type="object"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_start" string="Start Event" type="object"
+                            class="btn-primary" invisible="state != 'confirmed'"/>
+                    <button name="action_done" string="Mark Completed" type="object"
+                            class="btn-success" invisible="state not in ['confirmed','in_progress']"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            class="btn-secondary" invisible="state in ['done','cancel']"/>
+                    <button name="action_reset_draft" string="Reset to Draft" type="object"
+                            invisible="state != 'cancel'"/>
+                    <button name="action_print_wedding_report" string="Print Summary" type="object"
+                            class="btn-secondary"/>
+                    <button name="action_open_floor_plan" string="Floor Plan" type="object"
+                            class="btn-secondary"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirmed,in_progress,done"/>
+                </header>
+
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object"
+                                name="action_open_report_wizard" icon="fa-file-text-o">
+                            <span class="o_stat_text">Report</span>
+                        </button>
+                    </div>
+
+                    <widget name="web_ribbon" title="Cancelled" bg_color="bg-danger"
+                            invisible="state != 'cancel'"/>
+                    <widget name="web_ribbon" title="Completed" bg_color="bg-success"
+                            invisible="state != 'done'"/>
+                    <widget name="web_ribbon" title="In Progress" bg_color="bg-info"
+                            invisible="state != 'in_progress'"/>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1" class="dg-ref"/>
+                        </h1>
+                        <h2>
+                            <field name="couple_display" readonly="1" class="dg-couple-title"/>
+                        </h2>
+                        <field name="priority" widget="priority"/>
+                    </div>
+
+                    <group>
+                        <group string="Client">
+                            <field name="wedding_owner_name" placeholder="Full name..."/>
+                            <field name="wedding_owner_mobile"/>
+                            <field name="wedding_owner_email"/>
+                            <field name="wedding_owner_address"/>
+                            <field name="partner_id" optional="show"/>
+                        </group>
+                        <group string="Couple">
+                            <field name="bride_name" placeholder="Bride name..."/>
+                            <field name="groom_name" placeholder="Groom name..."/>
+                            <field name="ceremony_type"/>
+                            <field name="language"/>
+                            <field name="theme"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Event">
+                            <field name="hall_id" options="{'no_create': True}"/>
+                            <field name="wedding_date" widget="datetime"/>
+                            <field name="wedding_date_end" widget="datetime"/>
+                            <field name="duration_hours" readonly="1"/>
+                            <field name="expected_guests"/>
+                            <field name="confirmed_guests"/>
+                        </group>
+                        <group string="Contract">
+                            <field name="contract_number"/>
+                            <field name="contract_signed"/>
+                            <field name="contract_date" invisible="not contract_signed"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <!-- ── Financials ── -->
+                        <page string="Financials" name="financials">
+                            <group>
+                                <group string="Revenue">
+                                    <field name="wedding_menu_id"/>
+                                    <field name="menu_revenue" readonly="1" widget="monetary" options="{'currency_field':'currency_id'}"/>
+                                    <field name="hall_hire_fee" widget="monetary" options="{'currency_field':'currency_id'}"/>
+                                    <field name="wedding_earnings" widget="monetary" options="{'currency_field':'currency_id'}"/>
+                                </group>
+                                <group string="Deposit &amp; Balance">
+                                    <field name="deposit_amount" widget="monetary" options="{'currency_field':'currency_id'}"/>
+                                    <field name="deposit_date"/>
+                                    <field name="balance_due" readonly="1" widget="monetary" options="{'currency_field':'currency_id'}"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group string="Cost &amp; Profit">
+                                    <field name="total_cost" readonly="1" widget="monetary" options="{'currency_field':'currency_id'}"/>
+                                    <field name="net_profit" readonly="1" widget="monetary" options="{'currency_field':'currency_id'}"/>
+                                </group>
+                                <field name="currency_id" invisible="1"/>
+                            </group>
+                            <field name="spending_line_ids">
+                                <list editable="bottom" string="Additional Expenses">
+                                    <field name="date"/>
+                                    <field name="category"/>
+                                    <field name="name" placeholder="Description..."/>
+                                    <field name="amount" widget="monetary" options="{'currency_field':'currency_id'}"/>
+                                    <field name="paid" widget="boolean_toggle"/>
+                                    <field name="notes" optional="show"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <!-- ── Staff ── -->
+                        <page string="Staff" name="staff">
+                            <field name="employee_line_ids">
+                                <list editable="bottom" string="Assigned Staff">
+                                    <field name="employee_id"/>
+                                    <field name="role" readonly="1"/>
+                                    <field name="payment_type" readonly="1"/>
+                                    <field name="hours_worked" invisible="payment_type == 'monthly'"/>
+                                    <field name="hourly_rate" invisible="payment_type == 'monthly'"/>
+                                    <field name="total_to_pay" readonly="1" widget="monetary" options="{'currency_field':'currency_id'}"/>
+                                    <field name="notes" optional="show"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <!-- ── Table Plan ── -->
+                        <page string="Table Plan" name="tables">
+                            <div class="alert alert-info" role="alert">
+                                <i class="fa fa-info-circle"/> Select tables from the hall and assign waiters. Use the wizard button on each row for a quick assignment dialog.
+                            </div>
+                            <field name="table_line_ids">
+                                <list editable="bottom" string="Table Assignments"
+                                      decoration-success="occupancy_pct &gt;= 100"
+                                      decoration-warning="is_vip == True">
+                                    <field name="table_id" domain="[('hall_id','=',parent.hall_id)]"/>
+                                    <field name="table_shape" readonly="1"/>
+                                    <field name="standard_capacity" readonly="1"/>
+                                    <field name="actual_guests"/>
+                                    <field name="occupancy_pct" readonly="1" widget="progressbar"/>
+                                    <field name="assigned_waiter_id" domain="[('employee_type','=','waiter')]"/>
+                                    <field name="is_vip" widget="boolean_toggle"/>
+                                    <field name="special_notes" optional="show"/>
+                                    <button name="action_open_assignment_wizard" type="object"
+                                            string="" icon="fa-pencil-square-o"
+                                            title="Quick Edit"/>
+                                </list>
+                            </field>
+                            <group class="mt-2">
+                                <group>
+                                    <field name="tables_assigned" readonly="1"/>
+                                    <field name="total_seated" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- ── Notes ── -->
+                        <page string="Notes" name="notes">
+                            <field name="wedding_notes" placeholder="Internal notes, special requests, vendor contacts..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ─── Action ──────────────────────────────────────────────────── -->
+    <record id="action_dg_wedding" model="ir.actions.act_window">
+        <field name="name">Weddings</field>
+        <field name="res_model">dg.wedding</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="view_dg_wedding_search"/>
+        <field name="context">{'search_default_confirmed': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create your first Wedding Event</p>
+        </field>
+    </record>
+
+</odoo>
