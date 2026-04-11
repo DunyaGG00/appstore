@@ -12,90 +12,150 @@
       :root {
         --bg:#0f0a17; --surface:#1a1228; --surface2:#241836; --border:#3d2a58;
         --accent:#a855f7; --accent2:#ec4899; --gold:#f59e0b;
-        --success:#22c55e; --danger:#ef4444; --text:#f0e8ff; --muted:#8b6ba8;
+        --success:#22c55e; --danger:#ef4444; --warn:#f97316;
+        --text:#f0e8ff; --muted:#8b6ba8;
       }
-      body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); height:100vh; display:flex; flex-direction:column; overflow:hidden; }
+      body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text);
+             height:100vh; display:flex; flex-direction:column; overflow:hidden; }
 
       /* TOP BAR */
-      .topbar { background:var(--surface); border-bottom:1px solid var(--border); padding:0 22px; height:54px; display:flex; align-items:center; gap:14px; flex-shrink:0; z-index:100; }
-      .logo { font-family:'DM Mono',monospace; font-size:14px; font-weight:500; color:var(--accent); display:flex; align-items:center; gap:7px; }
+      .topbar { background:var(--surface); border-bottom:1px solid var(--border);
+                padding:0 18px; height:54px; display:flex; align-items:center;
+                gap:12px; flex-shrink:0; z-index:100; }
+      .logo { font-family:'DM Mono',monospace; font-size:14px; font-weight:500;
+              color:var(--accent); display:flex; align-items:center; gap:7px; white-space:nowrap; }
       .logo-heart { animation:pulse 2s infinite; }
       @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
-      .sep { width:1px; height:26px; background:var(--border); }
-      .title { font-size:13px; color:var(--muted); }
+      .sep { width:1px; height:26px; background:var(--border); flex-shrink:0; }
+      .title { font-size:13px; color:var(--muted); white-space:nowrap; overflow:hidden;
+               text-overflow:ellipsis; max-width:260px; }
       .title strong { color:var(--text); }
-      .mode-badge { font-size:10px; font-weight:600; padding:3px 10px; border-radius:10px; text-transform:uppercase; letter-spacing:1px; }
-      .mode-hall    { background:rgba(59,130,246,.2); color:#60a5fa; border:1px solid rgba(59,130,246,.3); }
-      .mode-wedding { background:rgba(168,85,247,.2); color:var(--accent); border:1px solid rgba(168,85,247,.3); }
-      .topbar-actions { margin-left:auto; display:flex; gap:9px; align-items:center; }
-      .btn { padding:6px 14px; border-radius:8px; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500; transition:all 0.15s; display:flex; align-items:center; gap:5px; }
+      .mode-badge { font-size:10px; font-weight:600; padding:3px 10px; border-radius:10px;
+                    text-transform:uppercase; letter-spacing:1px; white-space:nowrap; }
+      .mode-hall    { background:rgba(59,130,246,.2); color:#60a5fa;
+                      border:1px solid rgba(59,130,246,.3); }
+      .mode-wedding { background:rgba(168,85,247,.2); color:var(--accent);
+                      border:1px solid rgba(168,85,247,.3); }
+      .topbar-actions { margin-left:auto; display:flex; gap:8px; align-items:center;
+                        flex-shrink:0; }
+      .btn { padding:6px 13px; border-radius:8px; border:none; cursor:pointer;
+             font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500;
+             transition:all 0.15s; display:flex; align-items:center; gap:5px;
+             white-space:nowrap; }
+      .btn:disabled { opacity:.45; cursor:not-allowed; }
       .btn-ghost { background:transparent; color:var(--muted); border:1px solid var(--border); }
-      .btn-ghost:hover { background:var(--surface2); color:var(--text); }
+      .btn-ghost:hover:not(:disabled) { background:var(--surface2); color:var(--text); }
       .btn-primary { background:var(--accent); color:#fff; }
-      .btn-primary:hover { background:#9333ea; }
-      .back-link { font-size:12px; color:var(--muted); text-decoration:none; border:1px solid var(--border); padding:5px 12px; border-radius:7px; transition:all 0.15s; }
+      .btn-primary:hover:not(:disabled) { background:#9333ea; }
+      .btn-danger  { background:rgba(239,68,68,.15); color:var(--danger);
+                     border:1px solid rgba(239,68,68,.3); }
+      .btn-danger:hover:not(:disabled) { background:rgba(239,68,68,.25); }
+      .btn-add { background:rgba(34,197,94,.12); color:var(--success);
+                 border:1px solid rgba(34,197,94,.3); }
+      .btn-add:hover:not(:disabled) { background:rgba(34,197,94,.22); }
+      .back-link { font-size:12px; color:var(--muted); text-decoration:none;
+                   border:1px solid var(--border); padding:5px 12px; border-radius:7px;
+                   transition:all 0.15s; }
       .back-link:hover { background:var(--surface2); color:var(--text); }
 
+      /* ADD TABLE DROPDOWN */
+      .add-table-wrap { position:relative; }
+      .add-table-menu { position:absolute; top:calc(100% + 6px); right:0; z-index:200;
+                        background:var(--surface); border:1px solid var(--border);
+                        border-radius:10px; min-width:220px; max-height:280px;
+                        overflow-y:auto; box-shadow:0 12px 36px rgba(0,0,0,.5);
+                        display:none; }
+      .add-table-menu.open { display:block; }
+      .atm-hdr { padding:9px 13px 6px; font-size:10px; font-weight:600;
+                 text-transform:uppercase; letter-spacing:1px; color:var(--muted);
+                 border-bottom:1px solid var(--border); }
+      .atm-item { display:flex; align-items:center; justify-content:space-between;
+                  padding:8px 13px; cursor:pointer; transition:background .12s; }
+      .atm-item:hover { background:var(--surface2); }
+      .atm-name { font-size:13px; font-weight:500; }
+      .atm-sub  { font-size:10px; color:var(--muted); margin-top:1px; }
+      .atm-empty { padding:14px 13px; color:var(--muted); font-size:12px; text-align:center; }
+
       /* LEGEND */
-      .legend { display:flex; gap:12px; align-items:center; }
-      .legend-item { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--muted); }
+      .legend { display:flex; gap:10px; align-items:center; }
+      .legend-item { display:flex; align-items:center; gap:4px; font-size:11px;
+                     color:var(--muted); white-space:nowrap; }
       .ldot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
 
       /* LAYOUT */
       .layout { display:flex; flex:1; overflow:hidden; }
 
       /* SIDEBAR */
-      .sidebar { width:220px; background:var(--surface); border-right:1px solid var(--border); display:flex; flex-direction:column; overflow-y:auto; flex-shrink:0; }
-      .sb-sec { padding:13px 14px; border-bottom:1px solid var(--border); }
-      .sb-lbl { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:1.2px; color:var(--muted); margin-bottom:9px; }
+      .sidebar { width:215px; background:var(--surface); border-right:1px solid var(--border);
+                 display:flex; flex-direction:column; overflow:hidden; flex-shrink:0; }
+      .sb-sec { padding:12px 13px; border-bottom:1px solid var(--border); }
+      .sb-lbl { font-size:10px; font-weight:600; text-transform:uppercase;
+                letter-spacing:1.2px; color:var(--muted); margin-bottom:8px; }
       .stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
-      .stat-card { background:var(--surface2); border-radius:9px; padding:8px; text-align:center; border:1px solid var(--border); }
+      .stat-card { background:var(--surface2); border-radius:9px; padding:8px;
+                   text-align:center; border:1px solid var(--border); }
       .stat-val { font-size:18px; font-weight:700; font-family:'DM Mono',monospace; }
       .stat-lbl { font-size:10px; color:var(--muted); margin-top:1px; }
-      .c-purple .stat-val { color:var(--accent); } .c-pink .stat-val { color:var(--accent2); }
-      .c-gold .stat-val { color:var(--gold); }    .c-green .stat-val { color:var(--success); }
-
-      .tli { display:flex; align-items:center; gap:7px; padding:7px 9px; border-radius:7px; cursor:pointer; font-size:12px; color:var(--muted); transition:all .15s; margin-bottom:2px; border:1px solid transparent; }
+      .c-purple .stat-val { color:var(--accent); }  .c-pink .stat-val { color:var(--accent2); }
+      .c-gold .stat-val   { color:var(--gold); }    .c-green .stat-val { color:var(--success); }
+      .table-list-wrap { flex:1; overflow-y:auto; padding:12px 13px; }
+      .tli { display:flex; align-items:center; gap:7px; padding:7px 8px; border-radius:7px;
+             cursor:pointer; font-size:12px; color:var(--muted); transition:all .15s;
+             margin-bottom:2px; border:1px solid transparent; }
       .tli:hover { background:var(--surface2); color:var(--text); }
-      .tli.sel { background:rgba(168,85,247,.15); color:var(--accent); border-color:rgba(168,85,247,.35); }
-      .tli.vip { border-left:3px solid var(--gold) !important; }
-      .tli-info { flex:1; }
-      .tli-name { font-weight:500; }
-      .tli-sub { font-size:10px; margin-top:1px; color:var(--muted); }
-      .tbadge { font-size:10px; padding:1px 6px; border-radius:9px; font-family:'DM Mono',monospace; white-space:nowrap; }
-      .b-free    { background:rgba(34,197,94,.2);  color:var(--success); }
-      .b-partial { background:rgba(245,158,11,.2); color:var(--gold); }
-      .b-full    { background:rgba(168,85,247,.2); color:var(--accent); }
-      .b-over    { background:rgba(239,68,68,.2);  color:var(--danger); }
-      .b-vip     { background:rgba(245,158,11,.3); color:var(--gold); }
-      .b-layout  { background:rgba(59,130,246,.2); color:#60a5fa; }
+      .tli.sel  { background:rgba(168,85,247,.15); color:var(--accent);
+                  border-color:rgba(168,85,247,.35); }
+      .tli.vip  { border-left:3px solid var(--gold) !important; }
+      .tli-info { flex:1; min-width:0; }
+      .tli-name { font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+      .tli-sub  { font-size:10px; margin-top:1px; color:var(--muted);
+                  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+      .tbadge { font-size:10px; padding:1px 6px; border-radius:9px;
+                font-family:'DM Mono',monospace; white-space:nowrap; flex-shrink:0; }
+      .b-free    { background:rgba(34,197,94,.2);   color:var(--success); }
+      .b-partial { background:rgba(245,158,11,.2);  color:var(--gold); }
+      .b-full    { background:rgba(168,85,247,.2);  color:var(--accent); }
+      .b-over    { background:rgba(239,68,68,.2);   color:var(--danger); }
+      .b-vip     { background:rgba(245,158,11,.3);  color:var(--gold); }
+      .b-layout  { background:rgba(59,130,246,.2);  color:#60a5fa; }
 
       /* CANVAS */
-      .canvas-wrap { flex:1; position:relative; overflow:hidden;
+      .canvas-wrap { flex:1; position:relative; overflow:hidden; cursor:default;
         background: radial-gradient(ellipse at 25% 25%,rgba(168,85,247,.06) 0%,transparent 55%),
                     radial-gradient(ellipse at 75% 75%,rgba(236,72,153,.04) 0%,transparent 55%),
                     var(--bg); }
       .canvas-wrap::before { content:''; position:absolute; inset:0;
-        background-image:radial-gradient(circle,rgba(255,255,255,.05) 1px,transparent 1px);
-        background-size:30px 30px; pointer-events:none; }
-      .canvas { position:absolute; inset:28px;
-        background:rgba(168,85,247,.025);
+        background-image:radial-gradient(circle,rgba(255,255,255,.04) 1px,transparent 1px);
+        background-size:28px 28px; pointer-events:none; }
+      .canvas { position:absolute; inset:26px;
+        background:rgba(168,85,247,.02);
         border:1px dashed rgba(168,85,247,.2); border-radius:14px; }
-      .stage { position:absolute; top:18px; left:50%; transform:translateX(-50%);
-        background:linear-gradient(135deg,rgba(168,85,247,.2),rgba(236,72,153,.2));
-        border:2px solid rgba(168,85,247,.5); border-radius:10px;
-        padding:9px 36px; font-size:11px; color:var(--muted);
-        text-align:center; letter-spacing:2px; text-transform:uppercase; pointer-events:none; }
+      .stage { position:absolute; top:16px; left:50%; transform:translateX(-50%);
+        background:linear-gradient(135deg,rgba(168,85,247,.18),rgba(236,72,153,.18));
+        border:2px solid rgba(168,85,247,.45); border-radius:10px;
+        padding:8px 32px; font-size:11px; color:var(--muted);
+        text-align:center; letter-spacing:2px; text-transform:uppercase;
+        pointer-events:none; user-select:none; }
+      .canvas-hint { position:absolute; bottom:12px; left:50%; transform:translateX(-50%);
+        font-size:11px; color:rgba(139,107,168,.5); pointer-events:none; white-space:nowrap; }
 
       /* TABLE NODES */
-      .tnode { position:absolute; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; user-select:none; transition:filter .2s,transform .15s; z-index:10; }
-      .tnode:hover { filter:brightness(1.3); transform:scale(1.08); z-index:20; }
-      .tnode.sel { filter:brightness(1.45); z-index:30; }
-      .tshape { display:flex; flex-direction:column; align-items:center; justify-content:center; box-shadow:0 4px 16px rgba(0,0,0,.4); border:3px solid transparent; transition:border-color .2s; }
-      .tnode.sel .tshape { border-color:#fff; }
+      .tnode { position:absolute; cursor:grab; display:flex; flex-direction:column;
+               align-items:center; justify-content:center; user-select:none;
+               transition:filter .15s; z-index:10; }
+      .tnode:hover { filter:brightness(1.25); z-index:20; }
+      .tnode.sel  { filter:brightness(1.45); z-index:30; }
+      .tnode.dragging { cursor:grabbing; filter:brightness(1.4); z-index:50;
+                        transition:none; }
+      .tshape { display:flex; flex-direction:column; align-items:center;
+                justify-content:center; box-shadow:0 4px 18px rgba(0,0,0,.45);
+                border:3px solid transparent; transition:border-color .15s,
+                box-shadow .15s; }
+      .tnode.sel .tshape   { border-color:rgba(255,255,255,.9); }
+      .tnode.dragging .tshape { box-shadow:0 12px 36px rgba(0,0,0,.65); }
       .s-round  { border-radius:50%; }
       .s-square { border-radius:8px; }
-      .s-rect   { border-radius:8px; }
+      .s-rectangular { border-radius:8px; }
       .s-oval   { border-radius:50%; }
       .st-free    { background:radial-gradient(circle at 35% 35%,#3d6b4f,#1a3d2b); }
       .st-partial { background:radial-gradient(circle at 35% 35%,#7c5a1e,#4a3410); }
@@ -103,37 +163,60 @@
       .st-over    { background:radial-gradient(circle at 35% 35%,#8b2020,#5c1010); }
       .st-vip     { background:radial-gradient(circle at 35% 35%,#8c6800,#5a4200); }
       .st-layout  { background:radial-gradient(circle at 35% 35%,#1e3a5f,#0d2040); }
-      .tlabel { font-size:11px; font-weight:700; color:#fff; line-height:1.1; }
-      .tsub   { font-size:9px; color:rgba(255,255,255,.7); margin-top:1px; }
-      .crown  { position:absolute; top:-13px; font-size:13px; filter:drop-shadow(0 2px 4px rgba(0,0,0,.5)); animation:float 3s ease-in-out infinite; }
+      .tlabel { font-size:11px; font-weight:700; color:#fff; line-height:1.1; text-align:center; }
+      .tsub   { font-size:9px; color:rgba(255,255,255,.7); margin-top:1px; text-align:center; }
+      .crown  { position:absolute; top:-14px; font-size:13px;
+                filter:drop-shadow(0 2px 4px rgba(0,0,0,.5));
+                animation:float 3s ease-in-out infinite; }
       @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
 
       /* DETAIL PANEL */
-      .detail { width:260px; background:var(--surface); border-left:1px solid var(--border); display:flex; flex-direction:column; overflow-y:auto; flex-shrink:0; transform:translateX(100%); transition:transform .25s ease; }
+      .detail { width:265px; background:var(--surface); border-left:1px solid var(--border);
+                display:flex; flex-direction:column; overflow-y:auto; flex-shrink:0;
+                transform:translateX(100%); transition:transform .22s ease; }
       .detail.open { transform:translateX(0); }
-      .det-hdr { padding:16px 16px 10px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
-      .det-title { font-size:14px; font-weight:600; }
-      .det-close { cursor:pointer; color:var(--muted); font-size:19px; line-height:1; }
+      .det-hdr { padding:15px 16px 10px; border-bottom:1px solid var(--border);
+                 display:flex; align-items:center; justify-content:space-between;
+                 flex-shrink:0; }
+      .det-title { font-size:14px; font-weight:600; overflow:hidden; text-overflow:ellipsis;
+                   white-space:nowrap; }
+      .det-close { cursor:pointer; color:var(--muted); font-size:20px; line-height:1;
+                   margin-left:8px; flex-shrink:0; }
       .det-close:hover { color:var(--text); }
       .det-body { padding:13px 16px; flex:1; }
       .frow { margin-bottom:12px; }
-      .flbl { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.8px; margin-bottom:3px; }
+      .flbl { font-size:10px; color:var(--muted); text-transform:uppercase;
+              letter-spacing:.8px; margin-bottom:4px; }
       .fval { font-size:13px; font-weight:500; }
-      .finput { width:100%; background:var(--surface2); border:1px solid var(--border); color:var(--text); padding:6px 10px; border-radius:7px; font-family:'DM Sans',sans-serif; font-size:13px; }
+      .finput { width:100%; background:var(--surface2); border:1px solid var(--border);
+                color:var(--text); padding:6px 10px; border-radius:7px;
+                font-family:'DM Sans',sans-serif; font-size:13px; }
       .finput:focus { outline:none; border-color:var(--accent); }
-      .fselect { width:100%; background:var(--surface2); border:1px solid var(--border); color:var(--text); padding:6px 10px; border-radius:7px; font-family:'DM Sans',sans-serif; font-size:13px; cursor:pointer; }
-      .occ-wrap { background:var(--surface2); border-radius:5px; overflow:hidden; height:6px; margin-top:4px; }
-      .occ-bar  { height:100%; border-radius:5px; transition:width .3s,background .3s; }
-      .det-acts { padding:12px 16px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:6px; }
+      .fselect { width:100%; background:var(--surface2); border:1px solid var(--border);
+                 color:var(--text); padding:6px 10px; border-radius:7px;
+                 font-family:'DM Sans',sans-serif; font-size:13px; cursor:pointer; }
+      .fselect:focus { outline:none; border-color:var(--accent); }
+      .occ-wrap { background:var(--surface2); border-radius:4px; overflow:hidden;
+                  height:5px; margin-top:5px; }
+      .occ-bar  { height:100%; border-radius:4px; transition:width .25s,background .25s; }
+      .det-acts { padding:11px 16px; border-top:1px solid var(--border);
+                  display:flex; flex-direction:column; gap:6px; flex-shrink:0; }
 
       /* TOAST */
-      .toast { position:fixed; bottom:20px; right:20px; z-index:9999; background:var(--surface); border:1px solid var(--border); padding:10px 16px; border-radius:9px; font-size:12px; box-shadow:0 8px 24px rgba(0,0,0,.4); display:flex; align-items:center; gap:8px; transform:translateY(80px); opacity:0; transition:all .3s ease; max-width:280px; }
-      .toast.show { transform:translateY(0); opacity:1; }
+      .toast { position:fixed; bottom:20px; right:20px; z-index:9999;
+               background:var(--surface); border:1px solid var(--border);
+               padding:10px 16px; border-radius:10px; font-size:12px;
+               box-shadow:0 8px 28px rgba(0,0,0,.45);
+               display:flex; align-items:center; gap:8px;
+               transform:translateY(80px); opacity:0;
+               transition:all .28s cubic-bezier(.34,1.56,.64,1); max-width:290px; }
+      .toast.show   { transform:translateY(0); opacity:1; }
       .toast.success { border-color:var(--success); }
       .toast.error   { border-color:var(--danger); }
       .toast.info    { border-color:var(--accent); }
 
-      ::-webkit-scrollbar { width:5px; }
+      /* SCROLLBAR */
+      ::-webkit-scrollbar { width:4px; }
       ::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
     </style>
 </head>
@@ -149,20 +232,27 @@
   <div class="legend">
     <t t-if="mode == 'hall'">
       <div class="legend-item"><div class="ldot" style="background:#1e5f9e"/> Table</div>
-      <div class="legend-item" style="font-size:11px;color:var(--muted);">Drag to position · Click to rename</div>
+      <div class="legend-item" style="color:var(--muted);font-size:11px;">Drag to position · Click to edit</div>
     </t>
     <t t-if="mode == 'wedding'">
       <div class="legend-item"><div class="ldot" style="background:#22c55e"/> Free</div>
       <div class="legend-item"><div class="ldot" style="background:#f59e0b"/> Partial</div>
       <div class="legend-item"><div class="ldot" style="background:#a855f7"/> Full</div>
       <div class="legend-item"><div class="ldot" style="background:#ef4444"/> Over</div>
-      <div class="legend-item"><div class="ldot" style="background:#f59e0b;border:2px solid #fff"/> VIP</div>
     </t>
   </div>
   <div class="topbar-actions">
     <a class="back-link" t-att-href="back_url"><t t-esc="back_label"/></a>
     <button class="btn btn-ghost" onclick="resetLayout()">↺ Reset</button>
-    <button class="btn btn-primary" onclick="savePlan()">💾 Save to Odoo</button>
+    <!-- Add Table button: only visible in wedding mode, shown/hidden by JS -->
+    <div class="add-table-wrap" id="addTableWrap" style="display:none;">
+      <button class="btn btn-add" onclick="toggleAddTableMenu(event)">＋ Add Table</button>
+      <div class="add-table-menu" id="addTableMenu">
+        <div class="atm-hdr">Available Tables</div>
+        <div id="addTableList"></div>
+      </div>
+    </div>
+    <button class="btn btn-primary" id="saveBtn" onclick="savePlan()">💾 Save</button>
   </div>
 </div>
 
@@ -180,7 +270,7 @@
         <div class="stat-card c-green" id="occCard"><div class="stat-val" id="statOcc">—</div><div class="stat-lbl">Occupancy</div></div>
       </div>
     </div>
-    <div class="sb-sec" style="flex:1;overflow-y:auto;border-bottom:none;">
+    <div class="table-list-wrap">
       <div class="sb-lbl">Tables</div>
       <div id="tableList"></div>
     </div>
@@ -190,6 +280,7 @@
   <div class="canvas-wrap" id="canvasWrap">
     <div class="canvas" id="canvas">
       <div class="stage">♥ Altar / Stage ♥</div>
+      <div class="canvas-hint" id="canvasHint"></div>
     </div>
   </div>
 
@@ -199,12 +290,11 @@
       <div class="det-title" id="detTitle">Table</div>
       <div class="det-close" onclick="closeDetail()">×</div>
     </div>
-    <div class="det-body" id="detBody">
-      <!-- filled by JS -->
-    </div>
+    <div class="det-body" id="detBody"></div>
     <div class="det-acts" id="detActs">
-      <button class="btn btn-primary" onclick="applyDetail()" style="justify-content:center;">✓ Apply</button>
-      <button style="justify-content:center;background:var(--gold);color:#1a0a00;font-weight:600;" class="btn" onclick="applyAndClose()">✓ Apply &amp; Close</button>
+      <button class="btn btn-primary" onclick="applyDetail()" style="justify-content:center;">✓ Apply Changes</button>
+      <button class="btn" style="background:var(--gold);color:#1a0a00;font-weight:600;justify-content:center;" onclick="applyAndClose()">✓ Apply &amp; Close</button>
+      <button class="btn btn-danger" id="removeBtn" onclick="removeSelectedTable()" style="justify-content:center;display:none;">✕ Remove Table</button>
     </div>
   </div>
 
@@ -212,28 +302,56 @@
 
 <div class="toast" id="toast"><span id="toastIcon">✓</span><span id="toastMsg"></span></div>
 
-<!-- Inject server variables before the CDATA block -->
+<!-- Inject server-side variables into JS.
+     Values are marked as Markup in the controller to prevent HTML-escaping. -->
 <script>
 const MODE     = '<t t-esc="mode"/>';
 const SAVE_URL = '<t t-esc="save_url"/>';
 const CSRF     = '<t t-esc="csrf_token"/>';
-let tables  = <t t-out="tables_json"/>;
-let waiters = <t t-out="waiters_json"/>;
+let tables       = <t t-out="tables_json"/>;
+let waiters      = <t t-out="waiters_json"/>;
+let allHallTables = <t t-out="all_hall_tables_json"/>;
 </script>
 <script><![CDATA[
-let selectedId = null;
-let dragState  = null;
+'use strict';
 
-// ── Boot ──────────────────────────────────────────────────────────────────
+let selectedId           = null;
+let dragState            = null;
+let removedAssignmentIds = [];
+
+// ── Boot ──────────────────────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
     if (MODE === 'hall') {
         document.getElementById('seatedCard').style.display = 'none';
         document.getElementById('occCard').style.display    = 'none';
+    } else {
+        // Show "Add Table" button only in wedding mode
+        document.getElementById('addTableWrap').style.display = '';
+        // Show remove button in detail panel (controlled per open)
+        document.getElementById('removeBtn').style.display = '';
+        // Hint text
+        const h = document.getElementById('canvasHint');
+        if (allHallTables.length === 0 && tables.length === 0) {
+            h.textContent = 'No tables assigned yet — use "+ Add Table" to start';
+        } else {
+            h.textContent = 'Drag to reposition · Click to configure';
+        }
+    }
+    if (MODE === 'hall') {
+        document.getElementById('canvasHint').textContent = 'Drag to reposition · Click to rename';
     }
     render();
 });
 
-// ── Render ────────────────────────────────────────────────────────────────
+// Close dropdown when clicking outside
+document.addEventListener('click', (e) => {
+    const wrap = document.getElementById('addTableWrap');
+    if (wrap && !wrap.contains(e.target)) {
+        document.getElementById('addTableMenu').classList.remove('open');
+    }
+});
+
+// ── Render ────────────────────────────────────────────────────────────────────
 function render() { renderCanvas(); renderSidebar(); updateStats(); }
 
 function getStatus(t) {
@@ -246,12 +364,15 @@ function getStatus(t) {
 function renderCanvas() {
     document.querySelectorAll('.tnode').forEach(n => n.remove());
     const canvas = document.getElementById('canvas');
+    if (!tables.length) return;
+
     tables.forEach(t => {
-        const isRect = (t.shape === 'rect' || t.shape === 'rectangular');
+        const shape   = t.shape || 'round';
+        const isRect  = (shape === 'rectangular' || shape === 'rect');
+        const isOval  = (shape === 'oval');
         const w = isRect ? 116 : 86;
-        const h = isRect ? 66  : 86;
+        const h = isRect ? 64  : (isOval ? 60 : 86);
         const status = getStatus(t);
-        const shapeClass = 's-' + (isRect ? 'rect' : (t.shape || 'round'));
 
         const node = document.createElement('div');
         node.className = 'tnode' + (selectedId === t.id ? ' sel' : '');
@@ -259,19 +380,23 @@ function renderCanvas() {
         node.style.cssText = `left:${t.x}%;top:${t.y}%;transform:translate(-50%,-50%);`;
 
         let inner = (t.vip ? '<div class="crown">★</div>' : '') +
-            `<div class="tshape ${shapeClass} st-${status}" style="width:${w}px;height:${h}px;">` +
+            `<div class="tshape s-${shape} st-${status}" style="width:${w}px;height:${h}px;">` +
                 `<div class="tlabel">${esc(t.name)}</div>`;
         if (MODE === 'hall') {
             inner += `<div class="tsub">${t.capacity} seats</div>`;
         } else {
             inner += `<div class="tsub">${t.guests}/${t.capacity}</div>` +
-                     `<div class="tsub" style="font-size:8px;">${t.waiter ? t.waiter.split(' ')[0] : ''}</div>`;
+                     `<div class="tsub" style="font-size:8px;opacity:.8;">${t.waiter ? t.waiter.split(' ')[0] : ''}</div>`;
         }
         inner += '</div>';
         node.innerHTML = inner;
 
         node.addEventListener('mousedown', startDrag);
-        node.addEventListener('click', () => { if (!dragState || !dragState.moved) openDetail(t.id); });
+        node.addEventListener('touchstart', startDragTouch, { passive: false });
+        node.addEventListener('click', (e) => {
+            // Only open detail if this wasn't a drag
+            if (!dragState || !dragState.moved) openDetail(t.id);
+        });
         canvas.appendChild(node);
     });
 }
@@ -280,18 +405,18 @@ function renderSidebar() {
     const list = document.getElementById('tableList');
     list.innerHTML = '';
     if (!tables.length) {
-        list.innerHTML = '<div style="color:var(--muted);font-size:11px;">No tables.</div>';
+        list.innerHTML = '<div style="color:var(--muted);font-size:11px;padding:4px 0;">No tables in plan.</div>';
         return;
     }
     tables.forEach(t => {
         let bc = 'b-layout', bl = t.shape || 'round';
         if (MODE === 'wedding') {
             const pct = t.capacity ? (t.guests / t.capacity) * 100 : 0;
-            if (t.vip)            { bc = 'b-vip';    bl = '★ VIP'; }
-            else if (pct === 0)   { bc = 'b-free';   bl = 'Free'; }
-            else if (pct <= 60){ bc = 'b-partial'; bl = 'Partial'; }
-            else if (pct <= 100){ bc = 'b-full';  bl = 'Full'; }
-            else                  { bc = 'b-over';   bl = 'Over!'; }
+            if (t.vip)             { bc = 'b-vip';     bl = '★ VIP'; }
+            else if (pct === 0)    { bc = 'b-free';    bl = 'Free'; }
+            else if (pct <= 60)    { bc = 'b-partial'; bl = 'Partial'; }
+            else if (pct <= 100)   { bc = 'b-full';    bl = 'Full'; }
+            else                   { bc = 'b-over';    bl = 'Over!'; }
         }
         const item = document.createElement('div');
         item.className = 'tli' + (selectedId === t.id ? ' sel' : '') + (t.vip ? ' vip' : '');
@@ -300,8 +425,8 @@ function renderSidebar() {
             : t.guests + '/' + t.capacity + ' · ' + (t.waiter || 'No waiter');
         item.innerHTML = `<div class="tli-info">
             <div class="tli-name">${esc(t.name)}</div>
-            <div class="tli-sub">${sub}</div>
-          </div><span class="tbadge ${bc}">${bl}</span>`;
+            <div class="tli-sub">${esc(sub)}</div>
+          </div><span class="tbadge ${bc}">${esc(bl)}</span>`;
         item.addEventListener('click', () => openDetail(t.id));
         list.appendChild(item);
     });
@@ -317,38 +442,166 @@ function updateStats() {
     document.getElementById('statOcc').textContent    = MODE === 'hall' ? '—' : occ + '%';
 }
 
-// ── Drag ──────────────────────────────────────────────────────────────────
+// ── Mouse Drag ─────────────────────────────────────────────────────────────────
 function startDrag(e) {
     if (e.button !== 0) return;
     e.preventDefault();
-    const id   = e.currentTarget.dataset.id;
-    const t    = tables.find(x => x.id === id);
+    const id  = e.currentTarget.dataset.id;
+    const t   = tables.find(x => x.id === id);
     if (!t) return;
     const rect = document.getElementById('canvas').getBoundingClientRect();
-    dragState = { id, startX:e.clientX, startY:e.clientY, origX:t.x, origY:t.y, rect, moved:false };
+    dragState = { id, startX: e.clientX, startY: e.clientY,
+                  origX: t.x, origY: t.y, rect, moved: false };
+    e.currentTarget.classList.add('dragging');
     window.addEventListener('mousemove', onDrag);
-    window.addEventListener('mouseup',   endDrag);
+    window.addEventListener('mouseup', endDrag);
 }
+
 function onDrag(e) {
     if (!dragState) return;
     const dx = e.clientX - dragState.startX;
     const dy = e.clientY - dragState.startY;
-    if (Math.abs(dx) + Math.abs(dy) > 4) dragState.moved = true;
+    if (!dragState.moved && Math.abs(dx) + Math.abs(dy) > 4) dragState.moved = true;
     if (!dragState.moved) return;
     const t = tables.find(x => x.id === dragState.id);
     if (!t) return;
-    t.x = Math.max(5, Math.min(95, dragState.origX + (dx / dragState.rect.width)  * 100));
-    t.y = Math.max(15, Math.min(92, dragState.origY + (dy / dragState.rect.height) * 100));
-    const node = document.querySelector(`.tnode[data-id="${dragState.id}"]`);
+    t.x = Math.max(4, Math.min(96, dragState.origX + (dx / dragState.rect.width)  * 100));
+    t.y = Math.max(14, Math.min(93, dragState.origY + (dy / dragState.rect.height) * 100));
+    const node = document.querySelector(`.tnode[data-id="${CSS.escape(dragState.id)}"]`);
     if (node) { node.style.left = t.x + '%'; node.style.top = t.y + '%'; }
 }
-function endDrag() {
+
+function endDrag(e) {
+    if (dragState) {
+        const node = document.querySelector(`.tnode[data-id="${CSS.escape(dragState.id)}"]`);
+        if (node) node.classList.remove('dragging');
+    }
     window.removeEventListener('mousemove', onDrag);
-    window.removeEventListener('mouseup',   endDrag);
-    setTimeout(() => { dragState = null; }, 50);
+    window.removeEventListener('mouseup', endDrag);
+    // Small delay so click handler can read dragState.moved before we clear it
+    setTimeout(() => { dragState = null; }, 80);
 }
 
-// ── Detail Panel ──────────────────────────────────────────────────────────
+// ── Touch Drag ─────────────────────────────────────────────────────────────────
+function startDragTouch(e) {
+    if (e.touches.length !== 1) return;
+    e.preventDefault();
+    const touch = e.touches[0];
+    const id    = e.currentTarget.dataset.id;
+    const t     = tables.find(x => x.id === id);
+    if (!t) return;
+    const rect = document.getElementById('canvas').getBoundingClientRect();
+    dragState = { id, startX: touch.clientX, startY: touch.clientY,
+                  origX: t.x, origY: t.y, rect, moved: false };
+    e.currentTarget.classList.add('dragging');
+    window.addEventListener('touchmove', onDragTouch, { passive: false });
+    window.addEventListener('touchend',  endDragTouch);
+}
+
+function onDragTouch(e) {
+    if (!dragState || e.touches.length !== 1) return;
+    e.preventDefault();
+    const touch = e.touches[0];
+    const dx = touch.clientX - dragState.startX;
+    const dy = touch.clientY - dragState.startY;
+    if (!dragState.moved && Math.abs(dx) + Math.abs(dy) > 6) dragState.moved = true;
+    if (!dragState.moved) return;
+    const t = tables.find(x => x.id === dragState.id);
+    if (!t) return;
+    t.x = Math.max(4, Math.min(96, dragState.origX + (dx / dragState.rect.width)  * 100));
+    t.y = Math.max(14, Math.min(93, dragState.origY + (dy / dragState.rect.height) * 100));
+    const node = document.querySelector(`.tnode[data-id="${CSS.escape(dragState.id)}"]`);
+    if (node) { node.style.left = t.x + '%'; node.style.top = t.y + '%'; }
+}
+
+function endDragTouch(e) {
+    if (dragState) {
+        const node = document.querySelector(`.tnode[data-id="${CSS.escape(dragState.id)}"]`);
+        if (node) node.classList.remove('dragging');
+        if (!dragState.moved) openDetail(dragState.id);
+    }
+    window.removeEventListener('touchmove', onDragTouch);
+    window.removeEventListener('touchend',  endDragTouch);
+    setTimeout(() => { dragState = null; }, 80);
+}
+
+// ── Add Table (wedding mode only) ─────────────────────────────────────────────
+function toggleAddTableMenu(e) {
+    e.stopPropagation();
+    const menu = document.getElementById('addTableMenu');
+    if (menu.classList.contains('open')) {
+        menu.classList.remove('open');
+        return;
+    }
+    buildAddTableMenu();
+    menu.classList.add('open');
+}
+
+function buildAddTableMenu() {
+    const listEl = document.getElementById('addTableList');
+    const usedPhysIds = new Set(tables.map(t => t.phys_id));
+    const available = allHallTables.filter(t => !usedPhysIds.has(t.phys_id));
+    if (!available.length) {
+        listEl.innerHTML = '<div class="atm-empty">All hall tables are already in the plan.</div>';
+        return;
+    }
+    listEl.innerHTML = available.map(t => `
+      <div class="atm-item" onclick="addTableToCanvas(${t.phys_id})">
+        <div>
+          <div class="atm-name">${esc(t.name)}</div>
+          <div class="atm-sub">${t.capacity} seats · ${t.shape}</div>
+        </div>
+        <span style="font-size:18px;color:var(--success);">＋</span>
+      </div>`).join('');
+}
+
+function addTableToCanvas(physId) {
+    const phys = allHallTables.find(t => t.phys_id === physId);
+    if (!phys) return;
+    if (tables.find(t => t.phys_id === physId)) {
+        toast('Table already in plan', 'info');
+        return;
+    }
+    // Place new table in the center, slightly offset if others are nearby
+    const cx = 40 + (tables.length % 4) * 13;
+    const cy = 45 + Math.floor(tables.length / 4) * 20;
+    tables.push({
+        id:            'new_' + physId,
+        phys_id:       physId,
+        assignment_id: 0,
+        name:          phys.name,
+        shape:         phys.shape || 'round',
+        capacity:      phys.capacity || 8,
+        guests:        0,
+        waiter:        '',
+        waiter_id:     0,
+        vip:           false,
+        notes:         '',
+        x:             Math.min(cx, 88),
+        y:             Math.min(cy, 85),
+    });
+    document.getElementById('addTableMenu').classList.remove('open');
+    render();
+    toast(phys.name + ' added to plan', 'success');
+    // Update hint
+    document.getElementById('canvasHint').textContent = 'Drag to reposition · Click to configure';
+}
+
+function removeSelectedTable() {
+    if (!selectedId) return;
+    const t = tables.find(x => x.id === selectedId);
+    if (!t) return;
+    if (!confirm('Remove "' + t.name + '" from this event plan?')) return;
+    if (t.assignment_id) {
+        removedAssignmentIds.push(t.assignment_id);
+    }
+    tables = tables.filter(x => x.id !== selectedId);
+    closeDetail();
+    render();
+    toast(t.name + ' removed from plan', 'info');
+}
+
+// ── Detail Panel ──────────────────────────────────────────────────────────────
 function openDetail(id) {
     selectedId = id;
     const t = tables.find(x => x.id === id);
@@ -358,40 +611,68 @@ function openDetail(id) {
     const body = document.getElementById('detBody');
 
     if (MODE === 'hall') {
-        // Hall mode: only rename and capacity
         body.innerHTML = `
-          <div class="frow"><div class="flbl">Table Name</div>
-            <input class="finput" id="dName" value="${esc(t.name)}"/></div>
-          <div class="frow"><div class="flbl">Shape</div>
+          <div class="frow">
+            <div class="flbl">Table Name</div>
+            <input class="finput" id="dName" value="${esc(t.name)}" placeholder="Table name..."/>
+          </div>
+          <div class="frow">
+            <div class="flbl">Shape</div>
             <select class="fselect" id="dShape">
-              ${['round','rect','square','oval'].map(s =>
-                `<option value="${s}" ${t.shape===s?'selected':''}>${s}</option>`).join('')}
-            </select></div>
-          <div class="frow"><div class="flbl">Capacity (seats)</div>
-            <input class="finput" type="number" id="dCap" value="${t.capacity}" min="1" max="50"/></div>
-        `;
+              ${['round','rectangular','square','oval'].map(s =>
+                `<option value="${s}"${t.shape===s?' selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`
+              ).join('')}
+            </select>
+          </div>
+          <div class="frow">
+            <div class="flbl">Capacity (seats)</div>
+            <input class="finput" type="number" id="dCap" value="${t.capacity}" min="1" max="50"/>
+          </div>`;
+        // Hide remove button in hall mode
+        document.getElementById('removeBtn').style.display = 'none';
     } else {
-        // Wedding mode: guests, waiter, vip, notes
-        const pct = t.capacity ? Math.min(t.guests / t.capacity * 100, 150) : 0;
-        const barColor = pct === 0 ? 'var(--success)' : pct <= 60 ? 'var(--gold)' : pct <= 100 ? 'var(--accent)' : 'var(--danger)';
+        const pct = t.capacity ? Math.min((t.guests / t.capacity) * 100, 150) : 0;
+        const barClr = occBarColor(pct);
         const waiterOpts = '<option value="0">— No Waiter —</option>' +
-            waiters.map(w => `<option value="${w.id}" ${t.waiter_id===w.id?'selected':''}>${esc(w.name)}</option>`).join('');
+            waiters.map(w =>
+                `<option value="${w.id}"${t.waiter_id === w.id ? ' selected' : ''}>${esc(w.name)}</option>`
+            ).join('');
         body.innerHTML = `
-          <div class="frow"><div class="flbl">Table · Shape · Cap.</div>
-            <div class="fval">${esc(t.name)} · ${t.shape} · ${t.capacity} seats</div></div>
-          <div class="frow"><div class="flbl">Guests to Seat</div>
-            <input class="finput" type="number" id="dGuests" value="${t.guests}" min="0" oninput="liveOcc(this.value)"/>
-            <div class="occ-wrap"><div class="occ-bar" id="occBar" style="width:${Math.min(pct,100)}%;background:${barColor}"/></div>
-            <div id="occPct" style="font-size:10px;color:var(--muted);margin-top:2px;">${Math.round(pct)}% occupancy</div></div>
-          <div class="frow"><div class="flbl">Assigned Waiter</div>
-            <select class="fselect" id="dWaiter">${waiterOpts}</select></div>
-          <div class="frow"><div class="flbl">VIP Table</div>
-            <label style="display:flex;align-items:center;gap:7px;cursor:pointer;">
-              <input type="checkbox" id="dVip" ${t.vip?'checked':''} onchange="toggleVip()"/>
-              <span style="font-size:13px;">VIP ★</span></label></div>
-          <div class="frow"><div class="flbl">Special Notes</div>
-            <input class="finput" id="dNotes" value="${esc(t.notes||'')}"/></div>
-        `;
+          <div class="frow">
+            <div class="flbl">Table · Shape · Capacity</div>
+            <div class="fval">${esc(t.name)} · ${t.shape} · ${t.capacity} seats</div>
+          </div>
+          <div class="frow">
+            <div class="flbl">Guests to Seat</div>
+            <input class="finput" type="number" id="dGuests" value="${t.guests}"
+                   min="0" max="${Math.ceil(t.capacity * 1.5)}"
+                   oninput="liveOcc(this.value)"/>
+            <div class="occ-wrap" style="margin-top:6px;">
+              <div class="occ-bar" id="occBar"
+                   style="width:${Math.min(pct,100)}%;background:${barClr};"></div>
+            </div>
+            <div id="occPct" style="font-size:10px;color:var(--muted);margin-top:3px;">
+              ${Math.round(pct)}% occupancy
+            </div>
+          </div>
+          <div class="frow">
+            <div class="flbl">Assigned Waiter</div>
+            <select class="fselect" id="dWaiter">${waiterOpts}</select>
+          </div>
+          <div class="frow">
+            <div class="flbl">VIP Table</div>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:2px 0;">
+              <input type="checkbox" id="dVip" ${t.vip ? 'checked' : ''}
+                     onchange="toggleVip()" style="width:16px;height:16px;cursor:pointer;"/>
+              <span style="font-size:13px;">Mark as VIP ★</span>
+            </label>
+          </div>
+          <div class="frow">
+            <div class="flbl">Special Notes</div>
+            <input class="finput" id="dNotes" value="${esc(t.notes || '')}"
+                   placeholder="Any special requirements..."/>
+          </div>`;
+        document.getElementById('removeBtn').style.display = 'flex';
     }
 
     document.getElementById('detailPanel').classList.add('open');
@@ -405,20 +686,27 @@ function closeDetail() {
     render();
 }
 
+function occBarColor(pct) {
+    if (pct === 0)       return 'var(--success)';
+    if (pct <= 60)       return 'var(--gold)';
+    if (pct <= 100)      return 'var(--accent)';
+    return 'var(--danger)';
+}
+
 function liveOcc(val) {
     const t = tables.find(x => x.id === selectedId);
     if (!t) return;
-    const pct = t.capacity ? Math.min((parseInt(val)||0) / t.capacity * 100, 150) : 0;
+    const pct = t.capacity ? Math.min((parseInt(val) || 0) / t.capacity * 100, 150) : 0;
     const bar = document.getElementById('occBar');
     if (bar) {
-        bar.style.width = Math.min(pct, 100) + '%';
-        bar.style.background = pct === 0 ? 'var(--success)' : pct <= 60 ? 'var(--gold)' : pct <= 100 ? 'var(--accent)' : 'var(--danger)';
+        bar.style.width      = Math.min(pct, 100) + '%';
+        bar.style.background = occBarColor(pct);
         document.getElementById('occPct').textContent = Math.round(pct) + '% occupancy';
     }
 }
 
 function toggleVip() {
-    const t = tables.find(x => x.id === selectedId);
+    const t  = tables.find(x => x.id === selectedId);
     const cb = document.getElementById('dVip');
     if (t && cb) { t.vip = cb.checked; renderCanvas(); renderSidebar(); }
 }
@@ -427,17 +715,20 @@ function applyDetail() {
     const t = tables.find(x => x.id === selectedId);
     if (!t) return;
     if (MODE === 'hall') {
-        t.name     = (document.getElementById('dName')?.value || t.name).trim();
-        t.shape    = document.getElementById('dShape')?.value || t.shape;
-        t.capacity = parseInt(document.getElementById('dCap')?.value) || t.capacity;
+        const nameVal = document.getElementById('dName')?.value.trim();
+        if (nameVal) t.name = nameVal;
+        const shapeVal = document.getElementById('dShape')?.value;
+        if (shapeVal) t.shape = shapeVal;
+        const capVal = parseInt(document.getElementById('dCap')?.value);
+        if (capVal > 0) t.capacity = capVal;
+        document.getElementById('detTitle').textContent = t.name;
     } else {
-        t.guests    = parseInt(document.getElementById('dGuests')?.value) || 0;
-        const sel   = document.getElementById('dWaiter');
-        t.waiter_id = parseInt(sel?.value) || 0;
-        t.waiter    = sel?.selectedOptions[0]?.text || '';
-        if (t.waiter === '— No Waiter —') t.waiter = '';
-        t.vip       = document.getElementById('dVip')?.checked || false;
-        t.notes     = document.getElementById('dNotes')?.value || '';
+        t.guests = parseInt(document.getElementById('dGuests')?.value) || 0;
+        const sel    = document.getElementById('dWaiter');
+        t.waiter_id  = parseInt(sel?.value) || 0;
+        t.waiter     = t.waiter_id > 0 ? (sel?.selectedOptions[0]?.text || '') : '';
+        t.vip        = document.getElementById('dVip')?.checked || false;
+        t.notes      = document.getElementById('dNotes')?.value || '';
     }
     render();
     toast('Changes applied', 'success');
@@ -445,8 +736,12 @@ function applyDetail() {
 
 function applyAndClose() { applyDetail(); closeDetail(); }
 
-// ── Save to Odoo ──────────────────────────────────────────────────────────
+// ── Save to Odoo ──────────────────────────────────────────────────────────────
 async function savePlan() {
+    const btn = document.getElementById('saveBtn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Saving…';
+
     const payload = tables.map(t => ({
         phys_id:       t.phys_id || 0,
         assignment_id: t.assignment_id || 0,
@@ -460,50 +755,78 @@ async function savePlan() {
         x:             Math.round(t.x),
         y:             Math.round(t.y),
     }));
+
     try {
         const res = await fetch(SAVE_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': CSRF },
-            body: JSON.stringify({ jsonrpc:'2.0', method:'call', id:1, params:{ tables: payload } }),
+            method:  'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken':  CSRF,
+            },
+            body: JSON.stringify({
+                jsonrpc: '2.0',
+                method:  'call',
+                id:      1,
+                params:  {
+                    tables:      payload,
+                    removed_ids: removedAssignmentIds,
+                },
+            }),
         });
         const data = await res.json();
         if (data.result && data.result.success) {
-            toast('Saved to Odoo ✓', 'success');
+            removedAssignmentIds = [];
+            toast('Floor plan saved ✓', 'success');
+            // After a successful save, reload to get fresh IDs for newly created assignments
+            if (MODE === 'wedding' && payload.some(t => !t.assignment_id)) {
+                setTimeout(() => location.reload(), 900);
+            }
         } else {
-            toast('Error: ' + (data.result?.error || JSON.stringify(data.error)), 'error');
+            const errMsg = (data.result && data.result.error)
+                ? data.result.error
+                : (data.error ? JSON.stringify(data.error) : 'Unknown error');
+            toast('Save failed: ' + errMsg, 'error');
         }
-    } catch(err) {
+    } catch (err) {
         toast('Network error: ' + err.message, 'error');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = '💾 Save';
     }
 }
 
+// ── Reset Layout ──────────────────────────────────────────────────────────────
 function resetLayout() {
-    if (!confirm('Reset all positions to a default grid?')) return;
+    if (!tables.length) return;
+    if (!confirm('Reset all table positions to a grid layout?')) return;
     tables.forEach((t, i) => {
         t.x = 12 + ((i % 5) * 17);
         t.y = 38 + (Math.floor(i / 5) * 24);
     });
     render();
-    toast('Layout reset', 'info');
+    toast('Layout reset to grid', 'info');
 }
 
-// ── Utils ─────────────────────────────────────────────────────────────────
+// ── Utils ─────────────────────────────────────────────────────────────────────
 function esc(s) {
-    return String(s)
-        .replace(/&/g,'&amp;')
-        .replace(/</g,'&lt;')
-        .replace(/>/g,'&gt;')
-        .replace(/"/g,'&quot;');
+    return String(s ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
 }
 
 let toastTimer;
-function toast(msg, type='info') {
-    const el = document.getElementById('toast');
-    document.getElementById('toastIcon').textContent = {success:'✓',error:'✗',info:'ℹ'}[type]||'ℹ';
+function toast(msg, type) {
+    type = type || 'info';
+    const el   = document.getElementById('toast');
+    const icon = { success: '✓', error: '✗', info: 'ℹ' }[type] || 'ℹ';
+    document.getElementById('toastIcon').textContent = icon;
     document.getElementById('toastMsg').textContent  = msg;
     el.className = 'toast ' + type + ' show';
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => el.classList.remove('show'), 3000);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 3200);
 }
 ]]></script>
 </body>

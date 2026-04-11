@@ -1,14 +1,14 @@
 import json
 import logging
+from markupsafe import Markup
 from odoo import http
-from odoo.http import request, Response
+from odoo.http import request
 
 _logger = logging.getLogger(__name__)
 
 
 class WeddingFloorPlanController(http.Controller):
 
-    # ─── Helper: render a QWeb template as a full HTML response ───────────
     def _render_page(self, template, values):
         html = request.env['ir.ui.view']._render_template(template, values)
         return request.make_response(
@@ -16,10 +16,9 @@ class WeddingFloorPlanController(http.Controller):
             headers=[('Content-Type', 'text/html; charset=utf-8')]
         )
 
-    # ─────────────────────────────────────────────────────────────────────
-    # HALL FLOOR PLAN  (design positions of physical tables)
-    # Route: /dg_wedding_management/hall_plan/<hall_id>
-    # ─────────────────────────────────────────────────────────────────────
+    # ─────────────────────────────────────────────────────────────────────────
+    # HALL FLOOR PLAN  –  design positions of physical tables
+    # ─────────────────────────────────────────────────────────────────────────
     @http.route(
         '/dg_wedding_management/hall_plan/<int:hall_id>',
         type='http', auth='user', website=False,
@@ -30,15 +29,23 @@ class WeddingFloorPlanController(http.Controller):
             return request.not_found()
 
         tables_data = []
-        for t in hall.physical_table_ids:
+        for i, t in enumerate(hall.physical_table_ids):
+            x = t.position_x if t.position_x else (12 + ((i % 5) * 17))
+            y = t.position_y if t.position_y else (38 + ((i // 5) * 24))
             tables_data.append({
                 'id': 'phys_%d' % t.id,
                 'phys_id': t.id,
+                'assignment_id': 0,
                 'name': t.name,
                 'shape': t.shape or 'round',
                 'capacity': t.guest_capacity,
-                'x': t.position_x or 15,
-                'y': t.position_y or 40,
+                'guests': 0,
+                'waiter': '',
+                'waiter_id': 0,
+                'vip': False,
+                'notes': '',
+                'x': x,
+                'y': y,
             })
 
         values = {
@@ -48,8 +55,10 @@ class WeddingFloorPlanController(http.Controller):
             'back_label': '← Back to Hall',
             'back_url': '/odoo/dg-wedding-hall/%d' % hall_id,
             'save_url': '/dg_wedding_management/hall_plan/%d/save' % hall_id,
-            'tables_json': json.dumps(tables_data),
-            'waiters_json': json.dumps([]),
+            # Markup prevents QWeb from HTML-escaping the JSON inside <script>
+            'tables_json': Markup(json.dumps(tables_data)),
+            'waiters_json': Markup(json.dumps([])),
+            'all_hall_tables_json': Markup(json.dumps([])),
             'csrf_token': request.csrf_token(),
         }
         return self._render_page('dg_wedding_management.floor_plan_template', values)
@@ -65,23 +74,31 @@ class WeddingFloorPlanController(http.Controller):
         try:
             for tbl in (tables or []):
                 phys_id = tbl.get('phys_id')
-                if phys_id:
-                    phys = request.env['dg.wedding.table'].browse(phys_id)
-                    if phys.exists() and phys.hall_id.id == hall_id:
-                        phys.write({
-                            'position_x': int(tbl.get('x', 0)),
-                            'position_y': int(tbl.get('y', 0)),
-                        })
+                if not phys_id:
+                    continue
+                phys = request.env['dg.wedding.table'].browse(int(phys_id))
+                if not phys.exists() or phys.hall_id.id != hall_id:
+                    continue
+                write_vals = {
+                    'position_x': int(tbl.get('x', 0)),
+                    'position_y': int(tbl.get('y', 0)),
+                }
+                if tbl.get('name'):
+                    write_vals['name'] = str(tbl['name']).strip()
+                if tbl.get('shape') in ('round', 'rectangular', 'oval', 'square'):
+                    write_vals['shape'] = tbl['shape']
+                if tbl.get('capacity'):
+                    write_vals['guest_capacity'] = max(1, int(tbl['capacity']))
+                phys.write(write_vals)
             _logger.info("Hall plan saved: %s — %d tables", hall.name, len(tables or []))
             return {'success': True}
         except Exception as e:
             _logger.exception("Error saving hall plan %d", hall_id)
             return {'success': False, 'error': str(e)}
 
-    # ─────────────────────────────────────────────────────────────────────
-    # WEDDING FLOOR PLAN  (assign guests + waiters per event)
-    # Route: /dg_wedding_management/floor_plan/<wedding_id>
-    # ─────────────────────────────────────────────────────────────────────
+    # ─────────────────────────────────────────────────────────────────────────
+    # WEDDING FLOOR PLAN  –  assign guests + waiters per event
+    # ─────────────────────────────────────────────────────────────────────────
     @http.route(
         '/dg_wedding_management/floor_plan/<int:wedding_id>',
         type='http', auth='user', website=False,
@@ -91,25 +108,45 @@ class WeddingFloorPlanController(http.Controller):
         if not wedding.exists():
             return request.not_found()
 
+        # Build assigned table list
+        assigned_phys_ids = set()
         tables_data = []
         for line in wedding.table_line_ids:
+            phys = line.table_id
+            assigned_phys_ids.add(phys.id)
+            x = phys.position_x if phys.position_x else 15
+            y = phys.position_y if phys.position_y else 40
             tables_data.append({
                 'id': 'asgn_%d' % line.id,
                 'assignment_id': line.id,
-                'phys_id': line.table_id.id,
-                'name': line.table_id.name,
-                'shape': line.table_id.shape or 'round',
-                'capacity': line.standard_capacity,
+                'phys_id': phys.id,
+                'name': phys.name,
+                'shape': phys.shape or 'round',
+                'capacity': line.standard_capacity or phys.guest_capacity,
                 'guests': line.actual_guests,
                 'waiter': line.assigned_waiter_id.name if line.assigned_waiter_id else '',
                 'waiter_id': line.assigned_waiter_id.id if line.assigned_waiter_id else 0,
                 'vip': line.is_vip,
                 'notes': line.special_notes or '',
-                'x': line.table_id.position_x or 15,
-                'y': line.table_id.position_y or 40,
+                'x': x,
+                'y': y,
             })
 
-        # Waiters assigned to this wedding first, then all waiters as fallback
+        # Unassigned hall tables available to add
+        all_hall_tables = []
+        if wedding.hall_id:
+            for i, t in enumerate(wedding.hall_id.physical_table_ids):
+                if t.id not in assigned_phys_ids:
+                    all_hall_tables.append({
+                        'phys_id': t.id,
+                        'name': t.name,
+                        'shape': t.shape or 'round',
+                        'capacity': t.guest_capacity,
+                        'x': t.position_x if t.position_x else (12 + ((i % 5) * 17)),
+                        'y': t.position_y if t.position_y else (38 + ((i // 5) * 24)),
+                    })
+
+        # Waiters: prefer those already on this wedding, fall back to all waiters
         waiter_emps = wedding.employee_line_ids.filtered(
             lambda l: l.role == 'waiter'
         ).mapped('employee_id')
@@ -123,12 +160,17 @@ class WeddingFloorPlanController(http.Controller):
             'wedding': wedding,
             'hall': wedding.hall_id,
             'mode': 'wedding',
-            'title': '%s — %s' % (wedding.name, wedding.couple_display or wedding.wedding_owner_name),
+            'title': '%s — %s' % (
+                wedding.name,
+                wedding.couple_display or wedding.wedding_owner_name,
+            ),
             'back_label': '← Back to Wedding',
             'back_url': '/odoo/dg-wedding/%d' % wedding_id,
             'save_url': '/dg_wedding_management/floor_plan/%d/save' % wedding_id,
-            'tables_json': json.dumps(tables_data),
-            'waiters_json': json.dumps(waiters),
+            # Markup prevents QWeb from HTML-escaping the JSON inside <script>
+            'tables_json': Markup(json.dumps(tables_data)),
+            'waiters_json': Markup(json.dumps(waiters)),
+            'all_hall_tables_json': Markup(json.dumps(all_hall_tables)),
             'csrf_token': request.csrf_token(),
         }
         return self._render_page('dg_wedding_management.floor_plan_template', values)
@@ -137,35 +179,77 @@ class WeddingFloorPlanController(http.Controller):
         '/dg_wedding_management/floor_plan/<int:wedding_id>/save',
         type='json', auth='user', methods=['POST'],
     )
-    def wedding_floor_plan_save(self, wedding_id, tables=None, **kwargs):
+    def wedding_floor_plan_save(self, wedding_id, tables=None, removed_ids=None, **kwargs):
         wedding = request.env['dg.wedding'].browse(wedding_id)
         if not wedding.exists():
             return {'success': False, 'error': 'Wedding not found'}
         try:
+            TableAssignment = request.env['dg.wedding.table.assignment']
+            PhysTable = request.env['dg.wedding.table']
+
+            # 1. Delete assignments that were removed in the UI
+            if removed_ids:
+                to_remove = TableAssignment.browse([int(i) for i in removed_ids if i])
+                valid = to_remove.filtered(
+                    lambda r: r.exists() and r.wedding_id.id == wedding_id
+                )
+                valid.unlink()
+
+            # 2. Update existing / create new assignments
+            saved = 0
             for tbl in (tables or []):
-                assignment_id = tbl.get('assignment_id')
-                phys_id = tbl.get('phys_id')
+                assignment_id = tbl.get('assignment_id') or 0
+                phys_id = tbl.get('phys_id') or 0
+
+                waiter_id = int(tbl.get('waiter_id') or 0) or False
+
                 if assignment_id:
-                    asgn = request.env['dg.wedding.table.assignment'].browse(assignment_id)
-                    if asgn.exists():
+                    # Update existing assignment
+                    asgn = TableAssignment.browse(int(assignment_id))
+                    if asgn.exists() and asgn.wedding_id.id == wedding_id:
                         asgn.write({
-                            'actual_guests': tbl.get('guests', 0),
-                            'assigned_waiter_id': tbl.get('waiter_id') or False,
-                            'is_vip': tbl.get('vip', False),
-                            'special_notes': tbl.get('notes', ''),
+                            'actual_guests': int(tbl.get('guests', 0)),
+                            'assigned_waiter_id': waiter_id,
+                            'is_vip': bool(tbl.get('vip', False)),
+                            'special_notes': tbl.get('notes', '') or '',
                         })
-                # Always sync position back to physical table
+                        saved += 1
+
+                elif phys_id:
+                    # Create new assignment (table was added from the floor plan UI)
+                    phys = PhysTable.browse(int(phys_id))
+                    if (phys.exists()
+                            and wedding.hall_id
+                            and phys.hall_id.id == wedding.hall_id.id):
+                        # Guard against duplicates
+                        already = TableAssignment.search([
+                            ('wedding_id', '=', wedding_id),
+                            ('table_id', '=', int(phys_id)),
+                        ], limit=1)
+                        if not already:
+                            TableAssignment.create({
+                                'wedding_id': wedding_id,
+                                'table_id': int(phys_id),
+                                'actual_guests': int(tbl.get('guests', 0)),
+                                'assigned_waiter_id': waiter_id,
+                                'is_vip': bool(tbl.get('vip', False)),
+                                'special_notes': tbl.get('notes', '') or '',
+                            })
+                            saved += 1
+
+                # Always sync physical table position
                 if phys_id:
-                    phys = request.env['dg.wedding.table'].browse(phys_id)
+                    phys = PhysTable.browse(int(phys_id))
                     if phys.exists():
                         phys.write({
                             'position_x': int(tbl.get('x', 0)),
                             'position_y': int(tbl.get('y', 0)),
                         })
+
             _logger.info(
-                "Wedding floor plan saved: %s — %d tables", wedding.name, len(tables or [])
+                "Wedding floor plan saved: %s — %d tables", wedding.name, saved
             )
-            return {'success': True}
+            return {'success': True, 'saved': saved}
         except Exception as e:
             _logger.exception("Error saving wedding floor plan %d", wedding_id)
             return {'success': False, 'error': str(e)}

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; color: #333; margin: 0; padding: 0; }
+        .oe_container { max-width: 960px; margin: 0 auto; padding: 20px; }
+        .oe_row { margin-bottom: 30px; }
+        .oe_spaced { padding: 20px 0; }
+        h2.oe_slogan { font-size: 32px; font-weight: 700; color: #2c3e50; text-align: center; margin-bottom: 8px; }
+        h3.oe_slogan { font-size: 18px; color: #7f8c8d; text-align: center; font-weight: 400; margin-bottom: 30px; }
+
+        /* Hero banner */
+        .dg-hero { background: linear-gradient(135deg, #2c3e50 0%, #8e44ad 100%); color: #fff; border-radius: 8px; padding: 48px 40px; text-align: center; margin-bottom: 40px; }
+        .dg-hero h1 { font-size: 38px; margin: 0 0 12px; font-weight: 700; }
+        .dg-hero p { font-size: 18px; opacity: 0.9; margin: 0; }
+        .dg-badge { display: inline-block; background: rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 14px; font-size: 13px; margin-top: 16px; }
+
+        /* Feature cards */
+        .dg-features { display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 40px; }
+        .dg-feature-card { flex: 1 1 260px; background: #f9f9f9; border-radius: 8px; padding: 24px; border-left: 4px solid #8e44ad; }
+        .dg-feature-card h4 { margin: 0 0 10px; color: #2c3e50; font-size: 16px; }
+        .dg-feature-card p { margin: 0; font-size: 14px; color: #555; line-height: 1.6; }
+        .dg-icon { font-size: 28px; margin-bottom: 10px; display: block; }
+
+        /* Screenshot section */
+        .dg-screenshots { margin-bottom: 40px; }
+        .dg-screenshots h3 { font-size: 22px; color: #2c3e50; border-bottom: 2px solid #8e44ad; padding-bottom: 8px; margin-bottom: 20px; }
+        .dg-screenshots img { width: 100%; border-radius: 6px; box-shadow: 0 2px 12px rgba(0,0,0,0.12); margin-bottom: 20px; }
+        .dg-screenshots .dg-caption { font-size: 13px; color: #888; text-align: center; margin-top: -14px; margin-bottom: 24px; }
+
+        /* Highlights strip */
+        .dg-highlights { background: #2c3e50; color: #fff; border-radius: 8px; padding: 32px 40px; margin-bottom: 40px; }
+        .dg-highlights h3 { font-size: 20px; margin-top: 0; color: #e8d5f5; }
+        .dg-highlights ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 10px 30px; }
+        .dg-highlights ul li { font-size: 14px; line-height: 1.8; }
+        .dg-highlights ul li::before { content: "✓ "; color: #a855f7; font-weight: 700; }
+
+        /* Tech / requirements */
+        .dg-tech { background: #f0f4f8; border-radius: 8px; padding: 28px 32px; margin-bottom: 40px; }
+        .dg-tech h3 { font-size: 18px; color: #2c3e50; margin-top: 0; }
+        .dg-tech table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        .dg-tech td { padding: 8px 12px; border-bottom: 1px solid #dde3ec; }
+        .dg-tech td:first-child { font-weight: 600; color: #555; width: 160px; }
+
+        /* CTA */
+        .dg-cta { text-align: center; padding: 32px; background: linear-gradient(135deg, #8e44ad, #2c3e50); border-radius: 8px; color: #fff; }
+        .dg-cta h3 { font-size: 22px; margin-top: 0; }
+        .dg-cta p { font-size: 15px; opacity: 0.9; }
+    </style>
+</head>
+<body>
+
+<!-- ─── Hero ─────────────────────────────────────────────────────────────── -->
+<section class="oe_container">
+    <div class="dg-hero">
+        <h1>DG Wedding Management</h1>
+        <p>Everything a wedding hall needs — in one Odoo module.</p>
+        <span class="dg-badge">Odoo 18 · Services / Events</span>
+    </div>
+</section>
+
+<!-- ─── Tagline ───────────────────────────────────────────────────────────── -->
+<section class="oe_container">
+    <div class="oe_row oe_spaced" style="text-align:center; max-width:720px; margin:0 auto 40px;">
+        <p style="font-size:17px; color:#555; line-height:1.8;">
+            Manage every aspect of your wedding business from a single place.
+            From the first client inquiry to the final handshake — bookings, staff,
+            finances, seating plans, and reports are all handled here.
+        </p>
+    </div>
+</section>
+
+<!-- ─── Feature cards ────────────────────────────────────────────────────── -->
+<section class="oe_container">
+    <h2 class="oe_slogan">Key Features</h2>
+    <div class="dg-features">
+
+        <div class="dg-feature-card">
+            <span class="dg-icon">🗓️</span>
+            <h4>Full Event Lifecycle</h4>
+            <p>Five-stage workflow — Quotation → Confirmed → In Progress → Completed / Cancelled — with one-click transitions and a live status bar.</p>
+        </div>
+
+        <div class="dg-feature-card">
+            <span class="dg-icon">🏛️</span>
+            <h4>Hall &amp; Table Management</h4>
+            <p>Define multiple halls, each with its own tables (round, rectangular, oval, square), hire fee, and guest capacity. Double-booking prevention built in.</p>
+        </div>
+
+        <div class="dg-feature-card">
+            <span class="dg-icon">🗺️</span>
+            <h4>Interactive Floor Plan</h4>
+            <p>Drag-and-drop HTML5 canvas floor plan. Add or remove tables, reposition them, assign waiters, mark VIP seats — with full touch/mobile support.</p>
+        </div>
+
+        <div class="dg-feature-card">
+            <span class="dg-icon">👥</span>
+            <h4>Staff Assignment</h4>
+            <p>Assign waiters, chefs, MCs, security, and photographers. Per-event fixed-fee payment model with automatic cost roll-up into the event financials.</p>
+        </div>
+
+        <div class="dg-feature-card">
+            <span class="dg-icon">💶</span>
+            <h4>Financial Dashboard</h4>
+            <p>Menu revenue (price × guests), hall hire fee, additional expenses, deposit tracking, balance due, total cost and net profit — all computed automatically.</p>
+        </div>
+
+        <div class="dg-feature-card">
+            <span class="dg-icon">🍽️</span>
+            <h4>Menu Packages</h4>
+            <p>Create menu packages with a per-guest sale price. Link a menu to a wedding and the revenue is calculated instantly based on confirmed guest count.</p>
+        </div>
+
+        <div class="dg-feature-card">
+            <span class="dg-icon">📄</span>
+            <h4>PDF Reports</h4>
+            <p>Professional PDF reports for weddings, staff summaries, and financial breakdowns — generated via a clean wizard with optional date filters.</p>
+        </div>
+
+        <div class="dg-feature-card">
+            <span class="dg-icon">📊</span>
+            <h4>Kanban &amp; Analytics</h4>
+            <p>Color-coded Kanban board grouped by status. Priority flags, status ribbons (In Progress, Completed, Cancelled), and smart list decorations.</p>
+        </div>
+
+    </div>
+</section>
+
+<!-- ─── Screenshots ───────────────────────────────────────────────────────── -->
+<section class="oe_container dg-screenshots">
+    <h3>Screenshots</h3>
+
+    <img src="main_screenshot.png" alt="Wedding event form view"/>
+    <p class="dg-caption">Wedding event form — all details, financials, and staff on one page</p>
+
+    <img src="screen_kanban.png" alt="Kanban board view"/>
+    <p class="dg-caption">Kanban board grouped by status — see all your events at a glance</p>
+
+    <img src="screen_floor_plan.png" alt="Interactive floor plan"/>
+    <p class="dg-caption">Interactive floor plan — drag, drop, and assign in real time</p>
+
+    <img src="screen_financials.png" alt="Financials tab"/>
+    <p class="dg-caption">Financial tab — revenue, costs, deposit, net profit breakdown</p>
+
+    <img src="screen_staff.png" alt="Staff assignment"/>
+    <p class="dg-caption">Staff tab — assign team members with per-event fees</p>
+</section>
+
+<!-- ─── Full feature list ─────────────────────────────────────────────────── -->
+<section class="oe_container">
+    <div class="dg-highlights">
+        <h3>Everything included</h3>
+        <ul>
+            <li>Wedding event with auto-sequence reference (WED/YYYY/XXXX)</li>
+            <li>5-state workflow with validation guards</li>
+            <li>Bride &amp; groom names, ceremony type, language, theme</li>
+            <li>Contract number, signature tracking, contract date</li>
+            <li>Hall double-booking constraint (confirmed events only)</li>
+            <li>Physical table CRUD per hall</li>
+            <li>Table assignment with occupancy % progress bar</li>
+            <li>VIP table flagging</li>
+            <li>Waiter assignment per table</li>
+            <li>Drag-and-drop floor plan with touch support</li>
+            <li>Add / remove tables on the floor plan canvas</li>
+            <li>Per-event staff fixed-fee payment</li>
+            <li>Monthly-salary staff cost tracking</li>
+            <li>Additional expense lines with category &amp; paid flag</li>
+            <li>Menu revenue = menu price × confirmed guests</li>
+            <li>Deposit amount, deposit date, balance due</li>
+            <li>Net profit = earnings − total cost</li>
+            <li>PDF summary, financial, and staff reports</li>
+            <li>Report wizard with type selector &amp; date filter</li>
+            <li>Table assignment wizard for quick edits</li>
+            <li>Chatter &amp; message log on wedding events</li>
+            <li>Kanban with color-coded status badges</li>
+            <li>Search filters (status, today, hall, month)</li>
+            <li>Priority stars on events</li>
+            <li>75 automated tests included</li>
+        </ul>
+    </div>
+</section>
+
+<!-- ─── Technical requirements ───────────────────────────────────────────── -->
+<section class="oe_container">
+    <div class="dg-tech">
+        <h3>Technical Information</h3>
+        <table>
+            <tr><td>Odoo Version</td><td>18.0</td></tr>
+            <tr><td>License</td><td>OPL-1</td></tr>
+            <tr><td>Dependencies</td><td>base, mail, product, account, uom</td></tr>
+            <tr><td>Category</td><td>Services / Events</td></tr>
+            <tr><td>Automated Tests</td><td>75 tests (lifecycle, financials, staff, tables)</td></tr>
+            <tr><td>Custom Models</td><td>dg.wedding, dg.wedding.hall, dg.wedding.table, dg.wedding.employee, dg.wedding.menu, dg.wedding.spending.line, dg.wedding.employee.assignment, dg.wedding.table.assignment</td></tr>
+            <tr><td>Floor Plan</td><td>Custom HTML5 canvas controller — no external JS dependencies</td></tr>
+        </table>
+    </div>
+</section>
+
+<!-- ─── CTA ───────────────────────────────────────────────────────────────── -->
+<section class="oe_container">
+    <div class="dg-cta">
+        <h3>Ready to manage your wedding business?</h3>
+        <p>Install in minutes. No additional dependencies beyond the standard Odoo stack.</p>
+        <p style="font-size:13px; opacity:0.75;">Questions or custom requirements? Contact us via the Odoo Apps support channel.</p>
+    </div>
+</section>
+
+</body>
+</html>

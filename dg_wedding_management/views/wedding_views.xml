@@ -82,19 +82,19 @@
                             <field name="priority" widget="priority"/>
                         </div>
                         <div class="dg-couple">
-                            <i class="fa fa-heart text-danger me-1"/>
+                            <i class="fa fa-heart text-danger me-1" title="Couple"/>
                             <span t-esc="record.couple_display.value or record.wedding_owner_name.value"/>
                         </div>
                         <div class="dg-info-row">
-                            <i class="fa fa-building-o me-1 text-muted"/>
+                            <i class="fa fa-building-o me-1 text-muted" title="Hall"/>
                             <span t-esc="record.hall_id.value"/>
                         </div>
                         <div class="dg-info-row">
-                            <i class="fa fa-calendar me-1 text-muted"/>
+                            <i class="fa fa-calendar me-1 text-muted" title="Date"/>
                             <span t-esc="record.wedding_date.value"/>
                         </div>
                         <div class="dg-info-row">
-                            <i class="fa fa-users me-1 text-muted"/>
+                            <i class="fa fa-users me-1 text-muted" title="Guests"/>
                             <span t-esc="record.expected_guests.value"/> guests
                         </div>
                         <footer class="dg-card-footer">
@@ -236,8 +236,10 @@
                                     <field name="employee_id"/>
                                     <field name="role" readonly="1"/>
                                     <field name="payment_type" readonly="1"/>
-                                    <field name="hours_worked" invisible="payment_type == 'monthly'"/>
-                                    <field name="hourly_rate" invisible="payment_type == 'monthly'"/>
+                                    <field name="event_fee" widget="monetary" options="{'currency_field':'currency_id'}"
+                                           invisible="payment_type == 'monthly'"/>
+                                    <field name="hours_worked" optional="show"
+                                           invisible="payment_type == 'monthly'"/>
                                     <field name="total_to_pay" readonly="1" widget="monetary" options="{'currency_field':'currency_id'}"/>
                                     <field name="notes" optional="show"/>
                                     <field name="currency_id" column_invisible="1"/>
@@ -291,6 +293,7 @@
         <field name="name">Weddings</field>
         <field name="res_model">dg.wedding</field>
         <field name="view_mode">kanban,list,form</field>
+        <field name="path">dg-wedding</field>
         <field name="search_view_id" ref="view_dg_wedding_search"/>
         <field name="context">{'search_default_confirmed': 1}</field>
         <field name="help" type="html">

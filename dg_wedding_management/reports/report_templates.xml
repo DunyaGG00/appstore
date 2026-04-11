@@ -196,7 +196,7 @@
                         <th style="padding:8px 12px; text-align:left;">Role</th>
                         <th style="padding:8px 12px; text-align:left;">Payment Type</th>
                         <th style="padding:8px 12px; text-align:center;">Hours</th>
-                        <th style="padding:8px 12px; text-align:right;">Rate</th>
+                        <th style="padding:8px 12px; text-align:right;">Event Fee</th>
                         <th style="padding:8px 12px; text-align:right;">Total Pay</th>
                     </tr>
                 </thead>
@@ -209,10 +209,10 @@
                             <td style="padding:7px 12px;"><t t-esc="line.role"/></td>
                             <td style="padding:7px 12px;"><t t-esc="line.payment_type"/></td>
                             <td style="padding:7px 12px; text-align:center;">
-                                <t t-esc="'%.2f' % line.hours_worked"/>
+                                <t t-esc="'%.1f' % line.hours_worked if line.payment_type == 'per_wedding' else '—'"/>
                             </td>
                             <td style="padding:7px 12px; text-align:right;">
-                                <t t-esc="'%.2f' % line.hourly_rate"/>
+                                <t t-esc="'%.2f' % line.event_fee if line.payment_type == 'per_wedding' else '—'"/>
                             </td>
                             <td style="padding:7px 12px; text-align:right; font-weight:600;">
                                 <t t-esc="'%.2f %s' % (line.total_to_pay, doc.currency_id.symbol)"/>

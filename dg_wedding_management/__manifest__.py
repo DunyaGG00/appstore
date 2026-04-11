@@ -1,20 +1,26 @@
 {
     'name': 'DG Wedding Management',
-    'version': '18.0.1.0.0',
-    'summary': 'Comprehensive Wedding Hall & Event Management',
+    'version': '18.0.1.1.0',
+    'summary': 'Complete Wedding Hall & Event Management — Floor Plan, Staff, Financials & Reports',
     'description': """
-        Full-featured wedding management system:
-        - Wedding event lifecycle (draft → confirmed → in_progress → done)
-        - Hall & table management with interactive floor plan
-        - Staff assignment (waiters, chefs, security, etc.)
-        - Menu & cost tracking
-        - Financial reporting (revenue, cost, profit)
-        - PDF reports for every model
-        - Wizards for table assignment & report generation
+        Full-featured wedding management system for halls and event venues:
+        - Wedding event lifecycle (Quotation → Confirmed → In Progress → Completed)
+        - Hall & physical table management with drag-and-drop interactive floor plan
+        - Staff assignment with per-event fixed-fee payment tracking
+        - Menu packages with per-guest pricing
+        - Full financial dashboard: revenue, expenses, deposits, net profit
+        - PDF summary reports with custom wizard
+        - Table assignment wizard with waiter and VIP seat management
+        - Hall double-booking prevention
+        - Kanban, List and Form views with status ribbons
+        - 75 automated tests included
     """,
     'category': 'Services/Events',
-    'author': 'DG',
-    'license': 'LGPL-3',
+    'author': 'Red Bridge ERP',
+    'website': 'https://redbridgeerp.com',
+    'license': 'OPL-1',
+    'price': 150.0,
+    'currency': 'EUR',
     'depends': ['base', 'mail', 'product', 'account', 'uom'],
     'data': [
         'security/ir.model.access.csv',
@@ -36,7 +42,16 @@
             'dg_wedding_management/static/src/css/wedding_theme.css',
         ],
     },
-    'images': ['static/description/banner.png'],
+    'images': [
+        'static/description/main_screenshot.png',
+        'static/description/screen_kanban.png',
+        'static/description/screen_floor_plan.png',
+        'static/description/screen_financials.png',
+        'static/description/screen_staff.png',
+    ],
+    'demo': [
+        'data/demo_data.xml',
+    ],
     'installable': True,
     'application': True,
     'auto_install': False,

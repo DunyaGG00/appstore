@@ -11,7 +11,7 @@
                 <field name="phone"/>
                 <field name="payment_type"/>
                 <field name="monthly_wage" optional="show"/>
-                <field name="default_hourly_rate" optional="show"/>
+                <field name="event_fee" optional="show"/>
                 <field name="assignment_count"/>
                 <field name="total_earned" optional="show"/>
             </list>
@@ -38,7 +38,7 @@
                             </div>
                         </div>
                         <div class="mt-2">
-                            <i class="fa fa-phone me-1 text-muted"/>
+                            <i class="fa fa-phone me-1 text-muted" title="Phone"/>
                             <span t-esc="record.phone.value or '—'"/>
                         </div>
                         <footer>
@@ -78,9 +78,13 @@
                         </group>
                         <group string="Payment">
                             <field name="payment_type"/>
-                            <field name="monthly_wage" invisible="payment_type != 'monthly'"/>
-                            <field name="default_hourly_rate" invisible="payment_type != 'per_wedding'"/>
-                            <field name="total_earned" readonly="1"/>
+                            <field name="monthly_wage" invisible="payment_type != 'monthly'"
+                                   widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="event_fee" invisible="payment_type != 'per_wedding'"
+                                   widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="total_earned" readonly="1"
+                                   widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="currency_id" invisible="1"/>
                         </group>
                     </group>
                     <field name="address" placeholder="Address..."/>

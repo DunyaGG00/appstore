@@ -82,7 +82,7 @@ class WeddingTableAssignment(models.Model):
             else:
                 rec.occupancy_pct = 0.0
 
-    @api.constrains('actual_guests', 'standard_capacity')
+    @api.constrains('actual_guests', 'table_id')
     def _check_guests(self):
         for rec in self:
             if rec.actual_guests < 0:

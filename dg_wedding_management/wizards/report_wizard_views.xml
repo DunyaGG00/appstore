@@ -7,8 +7,8 @@
         <field name="arch" type="xml">
             <form string="Generate Report">
                 <sheet>
-                    <div class="alert alert-secondary mb-3">
-                        <i class="fa fa-file-pdf-o me-1"/>
+                    <div class="alert alert-secondary mb-3" role="status">
+                        <i class="fa fa-file-pdf-o me-1" title="PDF Report"/>
                         Select the report type and click <strong>Generate</strong> to download the PDF.
                     </div>
                     <group>
