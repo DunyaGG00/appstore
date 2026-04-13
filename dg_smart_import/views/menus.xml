@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        Smart Imports lives under Settings → Technical.
+        base.menu_administration is the "Technical" submenu inside the
+        Settings app — available in all Odoo installations via the base module.
+    -->
+    <menuitem id="menu_dg_smart_import_config"
+              name="Smart Imports"
+              parent="base.menu_administration"
+              action="action_dg_smart_import_config"
+              sequence="50"
+              groups="dg_smart_import.group_smart_import_manager"/>
+
+</odoo>

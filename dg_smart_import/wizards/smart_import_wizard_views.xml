@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_dg_smart_import_wizard_form" model="ir.ui.view">
+        <field name="name">dg.smart.import.wizard.form</field>
+        <field name="model">dg.smart.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Smart Import">
+
+                <!-- Step progress bar -->
+                <field name="state"
+                       widget="statusbar"
+                       statusbar_visible="upload,map,preview,done"/>
+
+                <sheet>
+
+                    <!-- Model badge — always visible -->
+                    <div class="alert alert-light border-0 bg-light mb-3 d-flex align-items-center gap-2 py-2">
+                        <i class="fa fa-database text-primary"/>
+                        <span>
+                            <strong>Model:</strong>
+                            <field name="model_id" readonly="1" nolabel="1" class="d-inline ms-1 fw-semibold"/>
+                            <span class="text-muted ms-2 small">
+                                (<field name="model_name" readonly="1" nolabel="1" class="d-inline"/>)
+                            </span>
+                        </span>
+                    </div>
+
+                    <!-- ═══════════════════════════════════════════════════════
+                         STEP 1 — UPLOAD
+                         Left: file upload widget
+                         Right: all importable fields for this model (reference)
+                         ═══════════════════════════════════════════════════════ -->
+                    <div class="row g-3" invisible="state != 'upload'">
+
+                        <!-- Upload panel -->
+                        <div class="col-lg-5">
+                            <div class="card h-100">
+                                <div class="card-header fw-semibold">
+                                    <i class="fa fa-upload me-1"/> Upload File
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="file_data" class="fw-semibold"/>
+                                        <field name="file_data"
+                                               widget="binary"
+                                               filename="file_name"
+                                               nolabel="1"/>
+                                        <field name="file_name" invisible="1"/>
+                                    </div>
+                                    <div class="alert alert-info py-2 small mb-0">
+                                        <ul class="mb-0 ps-3">
+                                            <li>Accepted: <strong>.csv</strong>, <strong>.xlsx</strong></li>
+                                            <li>Row 1 must be the <strong>header</strong> row</li>
+                                            <li>CSV: comma, semicolon, or tab delimiters auto-detected</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Available fields reference panel -->
+                        <div class="col-lg-7">
+                            <div class="card h-100">
+                                <div class="card-header fw-semibold">
+                                    <i class="fa fa-list-ul me-1"/> Available Fields for Import
+                                </div>
+                                <div class="card-body p-2">
+                                    <field name="field_info_html"
+                                           widget="html"
+                                           nolabel="1"
+                                           readonly="1"
+                                           sanitize="0"/>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- ═══════════════════════════════════════════════════════
+                         STEP 2 — MAP FIELDS
+                         ═══════════════════════════════════════════════════════ -->
+                    <div invisible="state != 'map'">
+                        <div class="alert alert-info py-2 small mb-2">
+                            <i class="fa fa-info-circle me-1"/>
+                            Map each <strong>file column</strong> to a <strong>model field</strong>.
+                            Leave <em>Map to Field</em> blank to skip a column.
+                        </div>
+                        <field name="mapping_line_ids" nolabel="1">
+                            <list editable="bottom" no_open="True">
+                                <field name="file_column"
+                                       string="File Column"
+                                       readonly="1"/>
+                                <field name="sample_value"
+                                       string="Sample Value"
+                                       readonly="1"/>
+                                <field name="field_id"
+                                       string="Map to Field"
+                                       domain="[
+                                           ('model_id', '=', parent.model_id),
+                                           ('store', '=', True),
+                                           ('ttype', 'not in', ['one2many','many2many','binary','reference','properties'])
+                                       ]"
+                                       options="{'no_create': True, 'no_open': True}"/>
+                                <field name="field_ttype"
+                                       string="Field Type"
+                                       readonly="1"
+                                       optional="show"/>
+                            </list>
+                        </field>
+                    </div>
+
+                    <!-- ═══════════════════════════════════════════════════════
+                         STEP 3 — PREVIEW (first 10 rows)
+                         ═══════════════════════════════════════════════════════ -->
+                    <div invisible="state != 'preview'">
+                        <div class="alert alert-warning py-2 small mb-2">
+                            <i class="fa fa-eye me-1"/>
+                            Showing the first 10 rows of mapped data.
+                            Click <strong>Import Now</strong> to commit all rows.
+                        </div>
+                        <field name="preview_html"
+                               widget="html"
+                               nolabel="1"
+                               readonly="1"
+                               sanitize="0"/>
+                    </div>
+
+                    <!-- ═══════════════════════════════════════════════════════
+                         STEP 4 — DONE
+                         ═══════════════════════════════════════════════════════ -->
+                    <div invisible="state != 'done'">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <div class="alert alert-success text-center mb-0 py-3">
+                                    <div class="display-5 fw-bold">
+                                        <field name="import_success_count"
+                                               nolabel="1"
+                                               class="d-inline"
+                                               readonly="1"/>
+                                    </div>
+                                    <div class="mt-1">Records imported</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6" invisible="import_error_count == 0">
+                                <div class="alert alert-danger text-center mb-0 py-3">
+                                    <div class="display-5 fw-bold">
+                                        <field name="import_error_count"
+                                               nolabel="1"
+                                               class="d-inline"
+                                               readonly="1"/>
+                                    </div>
+                                    <div class="mt-1">Records failed</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div invisible="not import_log">
+                            <div class="fw-semibold mb-1">Import Log</div>
+                            <field name="import_log"
+                                   widget="text"
+                                   nolabel="1"
+                                   readonly="1"
+                                   style="font-family:monospace;font-size:0.82em;min-height:130px"/>
+                        </div>
+                    </div>
+
+                </sheet>
+
+                <!-- ── Footer buttons ──────────────────────────────────────── -->
+                <footer>
+                    <!-- Step 1 -->
+                    <button name="action_parse_file"
+                            string="Parse File →"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state != 'upload'"/>
+
+                    <!-- Step 2 -->
+                    <button name="action_preview"
+                            string="Preview →"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state != 'map'"/>
+                    <button name="action_back_to_upload"
+                            string="← Back"
+                            type="object"
+                            invisible="state != 'map'"/>
+
+                    <!-- Step 3 -->
+                    <button name="action_import"
+                            string="Import Now"
+                            type="object"
+                            class="btn-primary"
+                            confirm="Import all rows into the database? This cannot be undone."
+                            invisible="state != 'preview'"/>
+                    <button name="action_back_to_map"
+                            string="← Back"
+                            type="object"
+                            invisible="state != 'preview'"/>
+
+                    <!-- Always visible -->
+                    <button special="cancel"
+                            string="Close"
+                            class="btn-secondary"/>
+                </footer>
+
+            </form>
+        </field>
+    </record>
+
+</odoo>

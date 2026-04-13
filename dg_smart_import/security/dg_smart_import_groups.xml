@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="group_smart_import_manager" model="res.groups">
+        <field name="name">Smart Import Manager</field>
+        <field name="category_id" ref="base.module_category_technical"/>
+        <field name="comment">
+            Users in this group can configure Smart Import settings and run the
+            import wizard on any model where Smart Import is enabled.
+        </field>
+    </record>
+
+</odoo>

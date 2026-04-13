@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        /* ── Reset & base ───────────────────────────────────────────── */
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; color: #333; margin: 0; padding: 0; }
+        h2, h3, h4 { margin-top: 0; }
+        p  { line-height: 1.7; }
+        ul { padding-left: 1.4em; line-height: 1.9; }
+        code { background: #f4f4f4; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; }
+
+        /* ── Layout ─────────────────────────────────────────────────── */
+        .oe_container { max-width: 960px; margin: 0 auto; padding: 40px 20px; }
+        .oe_dark      { background: #f9f7fb; }
+        .row          { display: flex; flex-wrap: wrap; gap: 24px; }
+        .col          { flex: 1; min-width: 220px; }
+        .col-4        { flex: 0 0 calc(33.33% - 16px); min-width: 200px; }
+
+        /* ── Hero ───────────────────────────────────────────────────── */
+        .hero         { text-align: center; padding: 60px 20px 48px; background: linear-gradient(135deg, #875A7B 0%, #5c3a57 100%); color: #fff; }
+        .hero h1      { font-size: 2.4em; margin: 0 0 12px; font-weight: 700; letter-spacing: -0.5px; }
+        .hero p       { font-size: 1.15em; opacity: .9; max-width: 640px; margin: 0 auto 28px; }
+        .hero .badge  { display: inline-block; background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.4); color: #fff; border-radius: 20px; padding: 5px 16px; font-size: .85em; margin: 4px; }
+
+        /* ── Section titles ─────────────────────────────────────────── */
+        .section-title { text-align: center; margin-bottom: 36px; }
+        .section-title h2 { font-size: 1.75em; color: #875A7B; margin-bottom: 8px; }
+        .section-title p  { color: #666; max-width: 580px; margin: 0 auto; }
+
+        /* ── Feature cards ──────────────────────────────────────────── */
+        .feature-card { background: #fff; border: 1px solid #e8e0ed; border-radius: 10px; padding: 24px; }
+        .feature-card .icon { font-size: 2em; margin-bottom: 12px; }
+        .feature-card h4 { color: #875A7B; margin-bottom: 8px; font-size: 1.05em; }
+        .feature-card p  { color: #555; font-size: .93em; margin: 0; }
+
+        /* ── Steps ──────────────────────────────────────────────────── */
+        .steps { counter-reset: step; }
+        .step  { display: flex; align-items: flex-start; gap: 20px; margin-bottom: 28px; }
+        .step-num { flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%; background: #875A7B; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.2em; font-weight: 700; }
+        .step-body h4 { margin: 0 0 6px; color: #333; }
+        .step-body p  { margin: 0; color: #555; font-size: .93em; }
+
+        /* ── Field type table ────────────────────────────────────────── */
+        table { width: 100%; border-collapse: collapse; font-size: .92em; }
+        th    { background: #875A7B; color: #fff; text-align: left; padding: 10px 14px; }
+        td    { padding: 9px 14px; border-bottom: 1px solid #eee; }
+        tr:last-child td { border-bottom: none; }
+        tr:nth-child(even) td { background: #faf8fc; }
+        .badge-type { display: inline-block; background: #e8e0ed; color: #5c3a57; border-radius: 4px; padding: 2px 8px; font-size: .8em; font-weight: 600; }
+        .check { color: #28a745; font-weight: bold; }
+        .dash  { color: #ccc; }
+
+        /* ── Highlight box ───────────────────────────────────────────── */
+        .highlight { background: #fff8e1; border-left: 4px solid #ffc107; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 24px 0; }
+        .highlight p { margin: 0; color: #555; }
+
+        /* ── Security grid ───────────────────────────────────────────── */
+        .security-item { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 16px; }
+        .security-item .icon { font-size: 1.5em; flex-shrink: 0; }
+
+        /* ── Footer ─────────────────────────────────────────────────── */
+        .footer { text-align: center; padding: 40px 20px; background: #5c3a57; color: rgba(255,255,255,.8); font-size: .9em; }
+        .footer a { color: #e8c9e0; }
+    </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     HERO
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="hero">
+    <h1>DG Smart Import</h1>
+    <p>Import CSV &amp; Excel files into <strong>any Odoo model</strong> — with visual field mapping, data preview, and per-row error isolation.</p>
+    <span class="badge">Odoo 18</span>
+    <span class="badge">CSV &amp; Excel</span>
+    <span class="badge">Any Model</span>
+    <span class="badge">No Coding</span>
+    <span class="badge">OPL-1</span>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     WHAT MAKES IT DIFFERENT
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="oe_container">
+    <div class="section-title">
+        <h2>One tool. Every model.</h2>
+        <p>Most import modules are hardcoded to a single model (Contacts, Products…). DG Smart Import works generically across your entire Odoo database — enable it on any model in seconds.</p>
+    </div>
+
+    <div class="row">
+        <div class="col feature-card">
+            <div class="icon">📂</div>
+            <h4>CSV &amp; Excel</h4>
+            <p>Upload <code>.csv</code> or <code>.xlsx</code> files. CSV delimiter auto-detected (comma, semicolon, tab). Excel blank rows skipped automatically.</p>
+        </div>
+        <div class="col feature-card">
+            <div class="icon">🗂️</div>
+            <h4>Visual Field Mapping</h4>
+            <p>Drag-and-drop style column picker. See the field's technical name, label, and type side-by-side with a sample value from your file.</p>
+        </div>
+        <div class="col feature-card">
+            <div class="icon">👁️</div>
+            <h4>10-Row Preview</h4>
+            <p>Inspect the first 10 rows of mapped data before committing. Catch mapping mistakes without touching the database.</p>
+        </div>
+        <div class="col feature-card">
+            <div class="icon">🛡️</div>
+            <h4>Per-Row Isolation</h4>
+            <p>Each row runs inside its own database savepoint. One bad row never blocks the rest — successful rows are always saved.</p>
+        </div>
+        <div class="col feature-card">
+            <div class="icon">⚠️</div>
+            <h4>Required Field Guard</h4>
+            <p>Before you reach the preview step, the wizard checks for required fields with no default. No more cryptic DB errors at import time.</p>
+        </div>
+        <div class="col feature-card">
+            <div class="icon">📋</div>
+            <h4>Detailed Error Log</h4>
+            <p>Full import summary: success count, failure count, and a per-row error message so you know exactly what to fix in your file.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     HOW IT WORKS
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="oe_dark">
+    <div class="oe_container">
+        <div class="section-title">
+            <h2>How it works</h2>
+            <p>Four guided steps from file upload to imported records.</p>
+        </div>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-body">
+                    <h4>Upload your file</h4>
+                    <p>Open Smart Import from the action menu of any list or form view. Upload your CSV or Excel file. On the right you immediately see all importable fields for that model — labels, technical names, and types — so you know how to structure your file.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-body">
+                    <h4>Map columns to fields</h4>
+                    <p>After parsing, each file column appears as a row in the mapping table along with a sample value. Use the dropdown to pick the matching model field. Skip any column by leaving it blank. The wizard warns you if a required field is not mapped.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-body">
+                    <h4>Preview your data</h4>
+                    <p>See the first 10 rows rendered in a table with your chosen column-to-field mapping applied. Verify the values look correct before committing anything to the database.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">4</div>
+                <div class="step-body">
+                    <h4>Import &amp; review</h4>
+                    <p>Click Import Now. Each row runs in its own savepoint. The results page shows how many records were created and a full per-row error log for any failures — no silent data loss.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="highlight">
+            <p>💡 <strong>Tip:</strong> The Smart Import action is injected automatically into the list and form views of any model you enable — no XML customisation required.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SUPPORTED FIELD TYPES
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="oe_container">
+    <div class="section-title">
+        <h2>Supported field types</h2>
+        <p>Automatic type conversion with sensible fallbacks and helpful error messages.</p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Field Type</th>
+                <th>Conversion Logic</th>
+                <th>Example input</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="badge-type">Char / Text / Html</span></td>
+                <td>Used as-is</td>
+                <td><code>Hello World</code></td>
+            </tr>
+            <tr>
+                <td><span class="badge-type">Integer</span></td>
+                <td>Float-safe parse (handles comma decimals)</td>
+                <td><code>42</code> or <code>42.0</code></td>
+            </tr>
+            <tr>
+                <td><span class="badge-type">Float / Monetary</span></td>
+                <td>Comma-or-dot decimal separator</td>
+                <td><code>1,250.50</code> or <code>1250,50</code></td>
+            </tr>
+            <tr>
+                <td><span class="badge-type">Boolean</span></td>
+                <td>true / 1 / yes / oui / x → True</td>
+                <td><code>true</code>, <code>1</code>, <code>yes</code></td>
+            </tr>
+            <tr>
+                <td><span class="badge-type">Date</span></td>
+                <td>Auto-detects 5 common formats</td>
+                <td><code>2025-12-31</code> or <code>31/12/2025</code></td>
+            </tr>
+            <tr>
+                <td><span class="badge-type">Datetime</span></td>
+                <td>Auto-detects ISO and locale formats</td>
+                <td><code>2025-12-31 14:30:00</code></td>
+            </tr>
+            <tr>
+                <td><span class="badge-type">Many2one</span></td>
+                <td>Exact name match, then case-insensitive fallback</td>
+                <td><code>Saudi Arabia</code></td>
+            </tr>
+            <tr>
+                <td><span class="badge-type">Selection</span></td>
+                <td>Matches by key or by translated label</td>
+                <td><code>done</code> or <code>Done</code></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECURITY
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="oe_dark">
+    <div class="oe_container">
+        <div class="section-title">
+            <h2>Security &amp; Access Control</h2>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="security-item">
+                    <div class="icon">🔐</div>
+                    <div>
+                        <h4>Smart Import Manager group</h4>
+                        <p>A dedicated security group controls who can access the configuration screen and run import wizards. Standard Odoo users see nothing.</p>
+                    </div>
+                </div>
+                <div class="security-item">
+                    <div class="icon">🔒</div>
+                    <div>
+                        <h4>Action menu restriction</h4>
+                        <p>The Smart Import action in list and form views is only visible to members of the Smart Import Manager group — enforced at the server action level.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="security-item">
+                    <div class="icon">✅</div>
+                    <div>
+                        <h4>ORM-only operations</h4>
+                        <p>All database operations go through the Odoo ORM. No raw SQL. Access rules, record rules, and field-level security all apply normally.</p>
+                    </div>
+                </div>
+                <div class="security-item">
+                    <div class="icon">💾</div>
+                    <div>
+                        <h4>Savepoint isolation</h4>
+                        <p>Each imported row uses a PostgreSQL savepoint. A constraint violation on row 5 does not roll back rows 1–4. Partial imports always succeed partially.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     TECHNICAL SPECS
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="oe_container">
+    <div class="section-title">
+        <h2>Technical Specifications</h2>
+    </div>
+    <div class="row">
+        <div class="col">
+            <h4>Requirements</h4>
+            <ul>
+                <li>Odoo Community or Enterprise <strong>18.0</strong></li>
+                <li>Depends on <code>base</code> only — no extra modules needed</li>
+                <li><code>openpyxl</code> for Excel imports (ships with Odoo 18)</li>
+            </ul>
+        </div>
+        <div class="col">
+            <h4>Models</h4>
+            <ul>
+                <li><code>dg.smart.import.config</code> — per-model on/off toggle</li>
+                <li><code>dg.smart.import.wizard</code> — TransientModel wizard</li>
+                <li><code>dg.smart.import.mapping.line</code> — column mapping rows</li>
+            </ul>
+        </div>
+        <div class="col">
+            <h4>Limitations</h4>
+            <ul>
+                <li>One2many / Many2many fields not supported</li>
+                <li>No update-existing-records mode (v1)</li>
+                <li>No mapping template save/load (v1)</li>
+                <li>No background/async import for very large files</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     FOOTER / SUPPORT
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="footer">
+    <p>
+        <strong>DG Smart Import</strong> &nbsp;·&nbsp; Red Bridge ERP &nbsp;·&nbsp;
+        <a href="https://redbridgeerp.com">redbridgeerp.com</a> &nbsp;·&nbsp;
+        <a href="mailto:support@redbridgeerp.com">support@redbridgeerp.com</a>
+    </p>
+    <p style="margin-top:8px;font-size:.85em;opacity:.7">
+        Licensed under OPL-1. Not for redistribution.
+    </p>
+</div>
+
+</body>
+</html>

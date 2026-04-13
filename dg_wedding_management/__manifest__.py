@@ -18,6 +18,7 @@
     'category': 'Services/Events',
     'author': 'Red Bridge ERP',
     'website': 'https://redbridgeerp.com',
+    'support': 'dunyamaligoyushlu00@gmail.com',
     'license': 'OPL-1',
     'price': 150.0,
     'currency': 'EUR',
